@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Yummy Restaurant</title>
+    </head>
+    <body>
+    <head>
+        <title>Yummy Restaurant</title>
+        <script>
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('iD');
+            fetch('http://127.0.0.1:5000/getItem')
+            .then(response => response.json())
+            .then(data => {
+                const items = document.getElementById('items');
+                data.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    if (item.stock) {
+                        var stock = "In Stock";
+                    } else {
+                        var stock = "Out of Stock";
+                    }
+                    itemDiv.innerHTML = `
+                        <div class="item">
+                            <div class="item-image" style="border: 1px solid black;">
+                                <img src="${item.img}" alt="Item Image">
+                            </div>
+                            <div class="item-details" style="border: 1px solid black;">
+                                <h2 class="item-name">${item.name}</h2>
+                                <p class="item-description">${item.description}</p>
+                                <p class="item-category">${item.category}</p>
+                                <p class="item-price">$${item.price}</p>
+                                <p class="item-stock">`+stock+`</p>
+                                <div class="item-quantity">
+                                    <label for="quantity">Quantity:</label>
+                                    <input type="number" id="quantity" name="quantity" min="1" max="10" value="1">
+                                </div>
+                                <button class="add-to-cart">Add to Cart</button>
+                            </div>
+                        </div> 
+                    `;
+                    items.appendChild(itemDiv);
+                });
+            });
+            fetch(`http://127.0.0.1:5000/getUser/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                if(data[0]){
+                    const headLine = document.getElementById('headLine');
+                    headLine.innerHTML = `
+                        <a>${data[1].name}</a>
+                        <a href="login.html" class="login active">Login</a>
+                        <a href="#" class="signup">Sign Up</a>
+                    `;
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <header>
+            <h1>Yummy Restaurant</h1>
+            <nav id="headLine"></nav>
+        </header>
+        <div id="items"></div>
+               
+        <style>
+            /* Add some basic styling to the header */
+            header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background-color: #f2f2f2;
+                padding: 10px;
+            }
+
+            /* Style the login and sign up links */
+            .login, .signup {
+                text-decoration: none;
+                color: #333;
+                font-weight: bold;
+                margin-right: 10px;
+            }
+
+            /* Style the active link */
+            .active {
+                color: #ff6600;
+            }
+
+            /* Style the item */
+            .item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 20px;
+                border: 1px solid #ccc;
+                padding: 10px;
+                width: 100%;
+            }
+
+            .item-image {
+                width: 30%;
+            }
+
+            .item-image img {
+                width: 100%;
+            }
+
+            .item-details {
+                width: 70%;
+                padding-left: 20px;
+            }
+
+            .item-name {
+                font-size: 24px;
+                margin: 0;
+            }
+
+            .item-description {
+                font-size: 16px;
+                margin: 0;
+            }
+
+            .item-category {
+                font-size: 16px;
+                margin: 0;
+            }
+
+            .item-price {
+                font-size: 24px;
+                margin: 0;
+            }
+
+            .item-stock {
+                font-size: 16px;
+                margin: 0;
+            }
+
+            .item-quantity {
+                margin-top: 10px;
+            }
+
+            .item-quantity label {
+                font-size: 16px;
+                margin-right: 10px;
+            }
+
+            .item-quantity input {
+                font-size: 16px;
+                padding: 5px;
+                width: 50px;
+            }
+
+            .add-to-cart {
+                margin-top: 10px;
+                padding: 10px;
+                background-color: #ff6600;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                font-size: 16px;
+                cursor: pointer;
+            }
+
+            .add-to-cart:hover {
+                background-color: #cc5200;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background-color: #f2f2f2;
+                padding: 10px;
+            }
+            
+            /* Style the login and sign up links */
+            .login, .signup {
+                text-decoration: none;
+                color: #333;
+                font-weight: bold;
+                margin-right: 10px;
+            }
+            
+            /* Style the active link */
+            .active {
+                color: #ff6600;
+            }
+            /* Style the cart button */
+            .cart-button {
+                background-color: #ff6600;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                font-size: 16px;
+                cursor: pointer;
+                padding: 10px;
+                margin-top: 10px;
+                }
+
+            /* Style the cart pop-up window */
+            .cart-popup {
+                display: none;
+                position: fixed;
+                z-index: 1;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0,0,0,0.4);
+            }
+
+            /* Style the cart pop-up content */
+            .cart-popup-content {
+                background-color: #f2f2f2;
+                margin: 10% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%;
+            }
+
+                        /* Style the close button */
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+        </style>
+    </body>
+</html>
