@@ -60,18 +60,47 @@ def logout():
     return redirect(url_for('home'))
 
 @app.route('/')
-def home(user=None):
-        if 'id' and 'name' and 'tab' not in session:
-            with open('food.json', 'r') as f:
-                data = json.load(f)
-            return render_template('YummyRestaurant.html', data=data)
-        else:
-            userID = session['id']  # get user dictionary from session
-            username = session['name']  # get user dictionary from session
-            tab = session['tab']  # get user dictionary from session
-            with open('food.json', 'r') as f:
-                data = json.load(f)
-            return render_template('YummyRestaurant.html', data=data, name=username, id=userID, tab=tab)
+def home():
+    with open('food.json', 'r') as f:
+        data = json.load(f)
+    
+    if 'id' and 'name' and 'tab' not in session:
+        return render_template('YummyRestaurant.html', data=data[:6]) # display first 5 data
+    else:
+        userID = session['id']  # get user dictionary from session
+        username = session['name']  # get user dictionary from session
+        tab = session['tab']  # get user dictionary from session
+        return render_template('YummyRestaurant.html', data=data[:6], name=username, id=userID, tab=tab) # display first 5 data
 
+
+@app.route('/page/<int:page>')
+def page_home(page):
+    page *= 6
+    with open('food.json', 'r') as f:
+        data = json.load(f)
+    if 'id' and 'name' and 'tab' not in session:
+        return render_template('YummyRestaurant.html', data=data[page:page+6])
+    else:
+        userID = session['id']  # get user dictionary from session
+        username = session['name']  # get user dictionary from session
+        tab = session['tab']  # get user dictionary from session
+        return render_template('YummyRestaurant.html', data=data[page:page+6], name=username, id=userID, tab=tab)
+    
+@app.route('/savefood', methods=['POST'])
+def savefood():
+    data = json.loads(request.data)
+    id = data['id']
+    quantity = data['quantity']
+    if int(quantity) == 0:
+        return jsonify({'error': 'Please enter a quantity'})
+    if session['food'][id] is None:
+        session['food'] = [{id: int(quantity)}]
+    elif id in session['food']:
+        session['food'][id] += int(quantity)
+    else:
+        session['food'].append({id: int(quantity)})
+    return jsonify({'message': 'success'})
+
+        
 if __name__ == '__main__':
     app.run(debug=True)
