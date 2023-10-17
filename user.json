@@ -1,0 +1,48 @@
+{
+  "customer": [
+    {
+      "address": "root",
+      "email": "root@root.com",
+      "id": "root",
+      "name": "root",
+      "password": "root"
+    },
+    {
+      "address": "user1",
+      "email": "user1@root.com",
+      "id": "user1",
+      "name": "user1",
+      "password": "1"
+    }
+  ],
+  "restaurant": [
+    {
+      "address": "restaurant1",
+      "email": "restaurant1@root.com",
+      "id": "restaurant1",
+      "name": "restaurant1",
+      "password": "1"
+    },
+    {
+      "address": "restaurant2",
+      "email": "restaurant2@root.com",
+      "id": "restaurant2",
+      "name": "restaurant2",
+      "password": "2"
+    }
+  ],
+  "deliveryPersonnel": [
+    {
+      "email": "deliveryPersonnel1@root.com",
+      "id": "deliveryPersonnel1",
+      "name": "deliveryPersonnel1",
+      "password": "1"
+    },
+    {
+        "email": "deliveryPersonnel2@root.com",
+        "id": "deliveryPersonnel2",
+        "name": "deliveryPersonnel2",
+        "password": "2"
+      }
+  ]
+}
