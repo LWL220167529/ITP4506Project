@@ -21,14 +21,14 @@
         body: JSON.stringify(item)
       })
       .then(response => response.json())
-      .then(data => alert(data.result))
+      .then(data => console.log(data.mas))
       .catch(error => console.error(error));
     }
     function foodpage(page) {
       if (page != 1){
-        window.location.href = "http://127.0.0.1:5000/page/"+page;
+        window.location.href = "page/"+page;
       } else {
-        window.location.href = "http://127.0.0.1:5000/";
+        window.location.href = "";
       }
     }
 </script>
