@@ -3,10 +3,8 @@ from flask_cors import CORS
 import json
     
 app = Flask(__name__, template_folder='templates')
-app.secret_key = 'id' # set your secret key here
-app.secret_key = 'name' # set your secret key here
-
 CORS(app)
+
 @app.route('/login', methods=['GET', 'POST'])
 def customerLogin():
     if request.method == 'POST':
@@ -86,21 +84,45 @@ def page_home(page):
         tab = session['tab']  # get user dictionary from session
         return render_template('YummyRestaurant.html', data=data[page:page+6], name=username, id=userID, tab=tab)
     
+@app.route('/search/<string:search> + <page>')
+def search_home(search, page):
+    page *= 6
+    with open('food.json', 'r') as f:
+        data = json.load(f)
+    food = []
+    for item in data:
+        if search in item['name'] or search in item['category']:
+            food.append(item)
+    if 'id' and 'name' and 'tab' not in session:
+        return render_template('YummyRestaurant.html', data=food[page:page+6])
+    else:
+        userID = session['id']  # get user dictionary from session
+        username = session['name']  # get user dictionary from session
+        tab = session['tab']  # get user dictionary from session
+        return render_template('YummyRestaurant.html', data=food[page:page+6], name=username, id=userID, tab=tab)
+    
 @app.route('/savefood', methods=['POST'])
 def savefood():
     data = json.loads(request.data)
     id = data['id']
     quantity = data['quantity']
-    if int(quantity) == 0:
-        return jsonify({'error': 'Please enter a quantity'})
-    if session['food'][id] is None:
-        session['food'] = [{id: int(quantity)}]
-    elif id in session['food']:
-        session['food'][id] += int(quantity)
-    else:
-        session['food'].append({id: int(quantity)})
-    return jsonify({'message': 'success'})
+    with open('cart.json', 'r') as f:
+        itemInCart = json.load(f)
+    cart = []
+    for item in itemInCart:
+        cart.append(item)
+    data = {
+        id: quantity
+    }
+    cart.append(data)
 
+    # open a file for writing
+    with open('cart.json', 'w') as f:
+        # write the list to the file in JSON format
+        json.dump(cart, f)
+
+
+    return jsonify({'mas': 'success'})
         
 if __name__ == '__main__':
     app.run(debug=True)
