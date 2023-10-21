@@ -15,6 +15,22 @@
       "name": "user1",
       "password": "1",
       "phone": "12345687"
+    },
+    {
+      "id": "1",
+      "name": "1",
+      "email": "123@qwe.com",
+      "phone": "12446546",
+      "address": "1",
+      "password": "12"
+    },
+    {
+      "id": "123",
+      "name": "123",
+      "email": "132@asd.com",
+      "phone": "12345679",
+      "address": "",
+      "password": "123"
     }
   ],
   "restaurant": [
@@ -44,11 +60,18 @@
       "phone": "12478653"
     },
     {
-        "email": "deliveryPersonnel2@root.com",
-        "id": "deliveryPersonnel2",
-        "name": "deliveryPersonnel2",
-        "password": "2",
-        "phone": "12784653"
-      }
+      "email": "deliveryPersonnel2@root.com",
+      "id": "deliveryPersonnel2",
+      "name": "deliveryPersonnel2",
+      "password": "2",
+      "phone": "12784653"
+    },
+    {
+      "id": "123",
+      "name": "123",
+      "email": "132@asd.com",
+      "phone": "12345679",
+      "password": "123"
+    }
   ]
 }
