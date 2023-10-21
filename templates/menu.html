@@ -22,16 +22,19 @@
     ></script>
     <script>
       function redirectToLogin() {
-        window.location.href = "http://127.0.0.1:5000/login";
+        window.location.href = "login/customer";
       }
       function redirectToLogout() {
-        window.location.href = "http://127.0.0.1:5000/logout";
+        window.location.href = "logout";
         alert("You have been logged out")
       }
-      function Search() {
+      function foodpage(page) {
         search = document.getElementById("Search").value;
-        window.location.href = "http://127.0.0.1:5000/search/"+search ;
-        alert("You have been logged out")
+        if (search == null){
+          window.location.href = "http://127.0.0.1:5000/page/"+page;
+        } else {
+          window.location.href = "http://127.0.0.1:5000/search/"+search+"/"+page;
+        }
       }
     </script>
     <header class="p-3 text-bg-dark">
@@ -39,14 +42,15 @@
           <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
             {% if id %}
-              <li><a class="nav-link px-2 text-white">Welcome {{name}}</a></li>
+              <li><a href="http://127.0.0.1:5000/user" class="nav-link px-2 text-white">Welcome {{name}}</a></li>
             {% endif %}
+              <li><a href="http://127.0.0.1:5000/" class="nav-link px-2 text-secondary">Home</a></li>
             {% if tab == "customer"%}
-              <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
               <li><a href="#" class="nav-link px-2 text-white">History</a></li>
-            {% else if tab == "restaurant" %}
+            {% elif tab == "restaurant" %}
             {% endif %}
             </ul>
+            {% if page == "home" %}
             <div class="btn-group">
                 <button type="button" class="btn btn-danger">Action</button>
                 <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
@@ -60,16 +64,15 @@
                   <li><a class="dropdown-item" href="#">Separated link</a></li>
                 </ul>
               </div>
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 ms-2" role="search" onsubmit="Search()", method="get">
-              <!-- Example split danger button -->
-              
-              <input id="Search" type="search" class="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search">
-            </form>
+              <form onsubmit="window.location.href = 'http://127.0.0.1:5000/search/'+document.getElementById('Search').value+'/1'; return false;">
+                <input id="Search" type="search" class="col-12 col-lg-auto mb-3 mb-lg-0 ms-2 text-bg-dark" placeholder="Search..." aria-label="Search" value="{{search}}" required>
+                <button type="submit" class="btn btn-primary me-lg-3">Search</button>
+              </form>
+            {%endif%}
+            <div class="text-end ms-2">
             {% if id %}
-            <div class="text-end">
               <button type="button" class="btn btn-outline-light me-2" onclick="redirectToLogout()">Logout</button>
             {% else %}
-            <div class="text-end">
               <button type="button" class="btn btn-outline-light me-2" onclick="redirectToLogin()">Login</button>
               <button type="button" class="btn btn-warning">Sign-up</button>
             </div>
