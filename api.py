@@ -84,23 +84,30 @@ def page_home(page):
         tab = session['tab']  # get user dictionary from session
         return render_template('YummyRestaurant.html', data=data[page:page+6], name=username, id=userID, tab=tab)
     
-@app.route('/search/<string:search> + <page>')
+@app.route('/search/<string:search>/<int:page>')
 def search_home(search, page):
-    page *= 6
-    with open('food.json', 'r') as f:
-        data = json.load(f)
-    food = []
-    for item in data:
-        if search in item['name'] or search in item['category']:
-            food.append(item)
+    if page == 1 or page == None:
+        page = 0
+    else:
+        page *= 6
+    food = search_food(search)
     if 'id' and 'name' and 'tab' not in session:
-        return render_template('YummyRestaurant.html', data=food[page:page+6])
+        return render_template('YummyRestaurant.html', data=food[page:page+6], search=search)
     else:
         userID = session['id']  # get user dictionary from session
         username = session['name']  # get user dictionary from session
         tab = session['tab']  # get user dictionary from session
-        return render_template('YummyRestaurant.html', data=food[page:page+6], name=username, id=userID, tab=tab)
+        return render_template('YummyRestaurant.html', data=food[page:page+6], name=username, id=userID, tab=tab, search=search)
     
+def search_food(keyword):
+        results = []
+        with open('food.json', 'r') as f:
+            data = json.load(f)
+        for food in data:
+            if keyword.lower() in food['name'].lower() or keyword.lower() in food['category'].lower():
+                results.append(food)
+        return results
+
 @app.route('/savefood', methods=['POST'])
 def savefood():
     data = json.loads(request.data)
@@ -120,8 +127,6 @@ def savefood():
     with open('cart.json', 'w') as f:
         # write the list to the file in JSON format
         json.dump(cart, f)
-
-
     return jsonify({'mas': 'success'})
         
 if __name__ == '__main__':
