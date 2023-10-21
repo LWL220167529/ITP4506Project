@@ -9,7 +9,7 @@ app.secret_key = 'tab'
 CORS(app)
 
 @app.route('/login', methods=['GET', 'POST'])
-def customerLogin():
+def login():
     if request.method == 'POST':
         with open('user.json', 'r') as f:
             data = json.load(f)
@@ -112,6 +112,38 @@ def get_customer_by_id():
             return render_template('user.html', tab=session['tab'], customerName=customer["name"], id=customer["id"], customerEmail=customer["email"], customerPhone=customer["phone"], customerAddress=customer["address"])
     return jsonify({"error": "Customer not found"})
 
-
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        print(request.form['user'])
+        if request.form['user'] != 'deliveryPersonnel':
+            with open('user.json', 'r') as f:
+                data = json.load(f)
+            new_user = {
+                "id": request.form['id'],
+                "name": request.form['name'],
+                "email": request.form['email'],
+                "phone": request.form['phone'],
+                "address": request.form['address'],
+                "password": request.form['password']
+            }
+            data[request.form['user']].append(new_user)
+            with open('user.json', 'w') as f:
+                json.dump(data, f)
+        else:
+            with open('user.json', 'r') as f:
+                data = json.load(f)
+            new_user = {
+                "id": request.form['id'],
+                "name": request.form['name'],
+                "email": request.form['email'],
+                "phone": request.form['phone'],
+                "password": request.form['password']
+            }
+            data[request.form['user']].append(new_user)
+            with open('user.json', 'w') as f:
+                json.dump(data, f)
+        return redirect(url_for('login'))
+    return render_template('register.html')
 if __name__ == '__main__':
     app.run(debug=True)
