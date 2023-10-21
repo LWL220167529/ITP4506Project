@@ -8,17 +8,16 @@ app.secret_key = 'name'
 app.secret_key = 'tab'
 CORS(app)
 
-@app.route('/login/<string:user>', methods=['GET', 'POST'])
-def customerLogin(user):
-    print(request)
+@app.route('/login', methods=['GET', 'POST'])
+def customerLogin():
     if request.method == 'POST':
         with open('user.json', 'r') as f:
             data = json.load(f)
-        for customer in data[user]:
+        for customer in data[request.form['user']]:
             if customer['id'] == request.form['email'] or customer['email'] == request.form['email'] and customer['password'] == request.form['password']:
                 session['id'] = customer['id']
                 session['name'] = customer['name']
-                session['tab'] = user
+                session['tab'] = request.form['user']
                 return redirect(url_for('home'))
         return render_template('login.html')
     else:
@@ -107,7 +106,7 @@ def get_customer_by_id():
     print(session['id'])
     with open('user.json', 'r') as f:
         data = json.load(f)
-    customers = data["customer"]
+    customers = data[session["tab"]]
     for customer in customers:
         if customer["id"] == session['id']:
             return render_template('user.html', tab=session['tab'], customerName=customer["name"], id=customer["id"], customerEmail=customer["email"], customerPhone=customer["phone"], customerAddress=customer["address"])
