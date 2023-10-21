@@ -3,6 +3,9 @@ from flask_cors import CORS
 import json
     
 app = Flask(__name__, template_folder='templates')
+app.secret_key = 'id'
+app.secret_key = 'name'
+app.secret_key = 'tab'
 CORS(app)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -122,12 +125,24 @@ def savefood():
         id: quantity
     }
     cart.append(data)
-
     # open a file for writing
     with open('cart.json', 'w') as f:
         # write the list to the file in JSON format
         json.dump(cart, f)
     return jsonify({'mas': 'success'})
-        
+
+@app.route('/user')
+def get_customer_by_id():
+    with open('user.json', 'r') as f:
+        data = json.load(f)
+    customers = data["customer"]
+    for customer in customers:
+        if customer["id"] == session['id']:
+            return render_template('user.html', tab=session['tab'], customerName=customer["name"], customerId=customer["id"],
+            customerEmail=customer["email"], customerPhone=customer["phone"], customerAddress=customer["address"])
+    
+    return jsonify({"error": "Customer not found"})
+
+
 if __name__ == '__main__':
     app.run(debug=True)
