@@ -15,6 +15,208 @@
       function home() {
         window.location.href = "http://127.0.0.1:5000/";
       }
+      function submit(user) {
+        window.location.href = "http://127.0.0.1:5000/login/" + user;
+      }
+      function changeUser(user) {
+        card = document.getElementById("card");
+        if (user == "customer") {
+          card.innerHTML = `<div class="card-body">
+                <h4 class="card-title">Login</h4>
+                <form method="POST" class="my-login-validation" novalidate="">
+                  <div class="form-group">
+                    <label for="email">E-Mail Address</label>
+                    <input
+                      id="email"
+                      type="email"
+                      class="form-control"
+                      name="email"
+                      value=""
+                      required
+                      autofocus
+                    />
+                    <div class="invalid-feedback">Email is invalid</div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="password"
+                      >Password
+                      <a href="forgot.html" class="float-right">
+                        Forgot Password?
+                      </a>
+                    </label>
+                    <input
+                      id="password"
+                      type="password"
+                      class="form-control"
+                      name="password"
+                      required
+                      data-eye
+                    />
+                    <div class="invalid-feedback">Password is required</div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="custom-checkbox custom-control">
+                      <input
+                        type="checkbox"
+                        name="remember"
+                        id="remember"
+                        class="custom-control-input"
+                      />
+                      <label for="remember" class="custom-control-label"
+                        >Remember Me</label
+                      >
+                    </div>
+                  </div>
+
+                  <div class="form-group m-0">
+                    <button type="button" class="btn btn-primary btn-block" onclick="submit('customer')">
+                      Login
+                    </button>
+                  </div>
+                  <div class="mt-4 text-center">
+                    Don't have an account?
+                    <a href="register.html">Create One</a>
+                  </div>
+                </form>
+              </div>
+              <div class="text-center">
+                <a href="#" onclick="changeUser('restaurant')">You are restaurant?</a><br>
+                <a href="#" onclick="changeUser('deliveryPersonnel')">You are Delivery Personnel?</a>
+              </div>`;
+        } else if (user == "restaurant") {
+          card.innerHTML = `<div class="card-body">
+                <h4 class="card-title">Login Restaurant</h4>
+                <form method="POST" class="my-login-validation" novalidate="">
+                  <div class="form-group">
+                    <label for="email">E-Mail Address</label>
+                    <input
+                      id="email"
+                      type="email"
+                      class="form-control"
+                      name="email"
+                      value=""
+                      required
+                      autofocus
+                    />
+                    <div class="invalid-feedback">Email is invalid</div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="password"
+                      >Password
+                      <a href="forgot.html" class="float-right">
+                        Forgot Password?
+                      </a>
+                    </label>
+                    <input
+                      id="password"
+                      type="password"
+                      class="form-control"
+                      name="password"
+                      required
+                      data-eye
+                    />
+                    <div class="invalid-feedback">Password is required</div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="custom-checkbox custom-control">
+                      <input
+                        type="checkbox"
+                        name="remember"
+                        id="remember"
+                        class="custom-control-input"
+                      />
+                      <label for="remember" class="custom-control-label"
+                        >Remember Me</label
+                      >
+                    </div>
+                  </div>
+
+                  <div class="form-group m-0">
+                    <button type="button" class="btn btn-primary btn-block" onclick="submit('restaurant')">
+                      Login
+                    </button>
+                  </div>
+                  <div class="mt-4 text-center">
+                    Don't have an account?
+                    <a href="register.html">Create One</a>
+                  </div>
+                </form>
+              </div>
+              <div class="text-center">
+                <a href="#" onclick="changeUser('customer')">You are customer?</a><br>
+                <a href="#" onclick="changeUser('deliveryPersonnel')">You are Delivery Personnel?</a>
+              </div>`;
+        } else if (user == "deliveryPersonnel") {
+          card.innerHTML = `<div class="card-body">
+                <h4 class="card-title">Login Delivery Personnel</h4>
+                <form method="POST" class="my-login-validation" novalidate="">
+                  <div class="form-group">
+                    <label for="email">E-Mail Address</label>
+                    <input
+                      id="email"
+                      type="email"
+                      class="form-control"
+                      name="email"
+                      value=""
+                      required
+                      autofocus
+                    />
+                    <div class="invalid-feedback">Email is invalid</div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="password"
+                      >Password
+                      <a href="forgot.html" class="float-right">
+                        Forgot Password?
+                      </a>
+                    </label>
+                    <input
+                      id="password"
+                      type="password"
+                      class="form-control"
+                      name="password"
+                      required
+                      data-eye
+                    />
+                    <div class="invalid-feedback">Password is required</div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="custom-checkbox custom-control">
+                      <input
+                        type="checkbox"
+                        name="remember"
+                        id="remember"
+                        class="custom-control-input"
+                      />
+                      <label for="remember" class="custom-control-label"
+                        >Remember Me</label
+                      >
+                    </div>
+                  </div>
+
+                  <div class="form-group m-0">
+                    <button type="button" class="btn btn-primary btn-block" onclick="submit('deliveryPersonnel')">
+                      Login
+                    </button>
+                  </div>
+                  <div class="mt-4 text-center">
+                    Don't have an account?
+                    <a href="register.html">Create One</a>
+                  </div>
+                </form>
+              </div>
+              <div class="text-center">
+                <a href="#" onclick="changeUser('restaurant')">You are restaurant?</a><br>
+                <a href="#" onclick="changeUser('customer')">You are customer?</a>
+              </div>`;
+        }
+      }
     </script>
   </head>
 
@@ -26,7 +228,7 @@
           <div class="card-wrapper">
             <div class="brand" style="height: 40%;">
             </div>
-            <div class="card fat">
+            <div id="card" class="card fat">
               <div class="card-body">
                 <h4 class="card-title">Login</h4>
                 <form method="POST" class="my-login-validation" novalidate="">
@@ -88,8 +290,8 @@
                 </form>
               </div>
               <div class="text-center">
-                <a href="#" onclick="window.location.href='http://127.0.0.1:5000/login/restaurant'">Login in of restaurant?</a><br>
-                <a href="#" onclick="window.location.href='http://127.0.0.1:5000/login/deliveryPersonnel'">You are Delivery Personnel?</a>
+                <a href="#" onclick="changeUser('restaurant')">You are restaurant?</a><br>
+                <a href="#" onclick="changeUser('deliveryPersonnel')">You are Delivery Personnel?</a>
               </div>
             </div>
           </div>

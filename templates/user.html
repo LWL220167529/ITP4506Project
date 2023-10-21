@@ -2,14 +2,14 @@
 {% block title %}User Profile{% endblock %}
 
 {% block content %}
+{% if tab == "customer"%}
     <h1>{{ customerName }}'s Profile</h1>
-    <p><strong>ID:</strong> {{ customerId }}</p>
+    <p><strong>ID:</strong> {{ id }}</p>
     <p><strong>Email:</strong> {{ customerEmail }}</p>
     <p><strong>Phone:</strong> {{ customerPhone }}</p>
     <p><strong>Address:</strong> {{ customerAddress }}</p>
-    
-    <h2>{{ tab }} Tab</h2>
+{% elif tab == "restaurant" %}
+{% endif %}
     <!-- Add more content here based on the tab -->
 {% endblock %}
 // END: user-profile
-{% endblock %}

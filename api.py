@@ -8,50 +8,21 @@ app.secret_key = 'name'
 app.secret_key = 'tab'
 CORS(app)
 
-@app.route('/login', methods=['GET', 'POST'])
-def customerLogin():
+@app.route('/login/<string:user>', methods=['GET', 'POST'])
+def customerLogin(user):
+    print(request)
     if request.method == 'POST':
         with open('user.json', 'r') as f:
             data = json.load(f)
-        for customer in data["customer"]:
+        for customer in data[user]:
             if customer['id'] == request.form['email'] or customer['email'] == request.form['email'] and customer['password'] == request.form['password']:
                 session['id'] = customer['id']
                 session['name'] = customer['name']
-                session['tab'] = 'customer'
+                session['tab'] = user
                 return redirect(url_for('home'))
         return render_template('login.html')
     else:
         return render_template('login.html')
-
-@app.route('/login/restaurant', methods=['GET', 'POST'])
-def restaurantLogin():
-    if request.method == 'POST':
-        with open('user.json', 'r') as f:
-            data = json.load(f)
-        for customer in data["restaurant"]:
-            if customer['id'] == request.form['email'] or customer['email'] == request.form['email'] and customer['password'] == request.form['password']:
-                session['id'] = customer['id']
-                session['name'] = customer['name']
-                session['tab'] = 'restaurant'
-                return redirect(url_for('home'))
-        return render_template('loginRestaurant.html')
-    else:
-        return render_template('loginRestaurant.html')
-
-@app.route('/login/deliveryPersonnel', methods=['GET', 'POST'])
-def deliveryPersonnelLogin():
-    if request.method == 'POST':
-        with open('user.json', 'r') as f:
-            data = json.load(f)
-        for customer in data["restaurant"]:
-            if customer['id'] == request.form['email'] or customer['email'] == request.form['email'] and customer['password'] == request.form['password']:
-                session['id'] = customer['id']
-                session['name'] = customer['name']
-                session['tab'] = 'deliveryPersonnel'
-                return redirect(url_for('home'))
-        return render_template('loginDeliveryPersonnel.html')
-    else:
-        return render_template('loginDeliveryPersonnel.html')
 
 @app.route('/logout')
 def logout():
@@ -66,12 +37,12 @@ def home():
         data = json.load(f)
     
     if 'id' and 'name' and 'tab' not in session:
-        return render_template('YummyRestaurant.html', data=data[:6]) # display first 5 data
+        return render_template('YummyRestaurant.html', data=data[:6], page="home") # display first 5 data
     else:
         userID = session['id']  # get user dictionary from session
         username = session['name']  # get user dictionary from session
         tab = session['tab']  # get user dictionary from session
-        return render_template('YummyRestaurant.html', data=data[:6], name=username, id=userID, tab=tab) # display first 5 data
+        return render_template('YummyRestaurant.html', data=data[:6], name=username, id=userID, tab=tab, page="home") # display first 5 data
 
 
 @app.route('/page/<int:page>')
@@ -80,12 +51,12 @@ def page_home(page):
     with open('food.json', 'r') as f:
         data = json.load(f)
     if 'id' and 'name' and 'tab' not in session:
-        return render_template('YummyRestaurant.html', data=data[page:page+6])
+        return render_template('YummyRestaurant.html', data=data[page:page+6], page="home")
     else:
         userID = session['id']  # get user dictionary from session
         username = session['name']  # get user dictionary from session
         tab = session['tab']  # get user dictionary from session
-        return render_template('YummyRestaurant.html', data=data[page:page+6], name=username, id=userID, tab=tab)
+        return render_template('YummyRestaurant.html', data=data[page:page+6], name=username, id=userID, tab=tab, page="home")
     
 @app.route('/search/<string:search>/<int:page>')
 def search_home(search, page):
@@ -95,12 +66,12 @@ def search_home(search, page):
         page *= 6
     food = search_food(search)
     if 'id' and 'name' and 'tab' not in session:
-        return render_template('YummyRestaurant.html', data=food[page:page+6], search=search)
+        return render_template('YummyRestaurant.html', data=food[page:page+6], search=search, page="home")
     else:
         userID = session['id']  # get user dictionary from session
         username = session['name']  # get user dictionary from session
         tab = session['tab']  # get user dictionary from session
-        return render_template('YummyRestaurant.html', data=food[page:page+6], name=username, id=userID, tab=tab, search=search)
+        return render_template('YummyRestaurant.html', data=food[page:page+6], name=username, id=userID, tab=tab, search=search, page="home")
     
 def search_food(keyword):
         results = []
@@ -111,7 +82,7 @@ def search_food(keyword):
                 results.append(food)
         return results
 
-@app.route('/savefood', methods=['POST'])
+@app.route('/savefood', methods=['GET', 'POST'])
 def savefood():
     data = json.loads(request.data)
     id = data['id']
@@ -133,14 +104,13 @@ def savefood():
 
 @app.route('/user')
 def get_customer_by_id():
+    print(session['id'])
     with open('user.json', 'r') as f:
         data = json.load(f)
     customers = data["customer"]
     for customer in customers:
         if customer["id"] == session['id']:
-            return render_template('user.html', tab=session['tab'], customerName=customer["name"], customerId=customer["id"],
-            customerEmail=customer["email"], customerPhone=customer["phone"], customerAddress=customer["address"])
-    
+            return render_template('user.html', tab=session['tab'], customerName=customer["name"], id=customer["id"], customerEmail=customer["email"], customerPhone=customer["phone"], customerAddress=customer["address"])
     return jsonify({"error": "Customer not found"})
 
 
