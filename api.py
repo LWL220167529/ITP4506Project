@@ -34,14 +34,15 @@ def logout():
 def home():
     with open('food.json', 'r') as f:
         data = json.load(f)
-    
+    page_count = len(data) // 6
     if 'id' and 'name' and 'tab' not in session:
-        return render_template('YummyRestaurant.html', data=data[:6], page="home") # display first 5 data
+        return render_template('YummyRestaurant.html', data=data[:6], page="home", dataPage=page_count) # display first 5 data
     else:
         userID = session['id']  # get user dictionary from session
         username = session['name']  # get user dictionary from session
         tab = session['tab']  # get user dictionary from session
-        return render_template('YummyRestaurant.html', data=data[:6], name=username, id=userID, tab=tab, page="home") # display first 5 data
+        return render_template('YummyRestaurant.html', data=data[:6], name=username, id=userID,
+             tab=tab, page="home", dataPage=page_count) # display first 5 data
 
 
 @app.route('/page/<int:page>')
@@ -49,13 +50,15 @@ def page_home(page):
     page *= 6
     with open('food.json', 'r') as f:
         data = json.load(f)
-    if 'id' and 'name' and 'tab' not in session:
-        return render_template('YummyRestaurant.html', data=data[page:page+6], page="home")
+    page_count = len(data) // 6
+    if 'id' not in session:
+        return render_template('YummyRestaurant.html', data=data[page:page+6], page="home", dataPage=page_count)
     else:
         userID = session['id']  # get user dictionary from session
         username = session['name']  # get user dictionary from session
         tab = session['tab']  # get user dictionary from session
-        return render_template('YummyRestaurant.html', data=data[page:page+6], name=username, id=userID, tab=tab, page="home")
+        return render_template('YummyRestaurant.html', data=data[page:page+6], name=username, id=userID, tab=tab,
+                                page="home", dataPage=page_count)
     
 @app.route('/search/<string:search>/<int:page>')
 def search_home(search, page):
@@ -64,14 +67,16 @@ def search_home(search, page):
     else:
         page *= 6
     food = search_food(search)
+    page_count = len(food) // 6
     if 'id' and 'name' and 'tab' not in session:
-        return render_template('YummyRestaurant.html', data=food[page:page+6], search=search, page="home")
+        return render_template('YummyRestaurant.html', data=food[page:page+6], search=search, page="home", dataPage=page_count)
     else:
         userID = session['id']  # get user dictionary from session
         username = session['name']  # get user dictionary from session
         tab = session['tab']  # get user dictionary from session
-        return render_template('YummyRestaurant.html', data=food[page:page+6], name=username, id=userID, tab=tab, search=search, page="home")
-    
+        return render_template('YummyRestaurant.html', data=food[page:page+6], name=username, id=userID, tab=tab,
+                                search=search, page="home", dataPage=page_count)
+
 def search_food(keyword):
         results = []
         with open('food.json', 'r') as f:
@@ -83,34 +88,91 @@ def search_food(keyword):
 
 @app.route('/savefood', methods=['GET', 'POST'])
 def savefood():
-    data = json.loads(request.data)
-    id = data['id']
-    quantity = data['quantity']
-    with open('cart.json', 'r') as f:
-        itemInCart = json.load(f)
-    cart = []
-    for item in itemInCart:
-        cart.append(item)
-    data = {
-        id: quantity
-    }
-    cart.append(data)
-    # open a file for writing
-    with open('cart.json', 'w') as f:
-        # write the list to the file in JSON format
-        json.dump(cart, f)
-    return jsonify({'mas': 'success'})
+    try:
+        data = json.loads(request.data)
+        id = str(data['id'])  # convert id to integer
+        quantity = data['quantity']
+        with open('cart.json', 'r') as f:
+            itemInCart = json.load(f)
+        for item in itemInCart:
+            if id in item:
+                item[id] = str(int(item[id]) + int(quantity))
+                break
+        else:
+            itemInCart.append({id: quantity})
+        # open a file for writing
+        with open('cart.json', 'w') as f:
+            # write the list to the file in JSON format
+            json.dump(itemInCart, f)
+        return jsonify({'message': 'success'})
+    except:
+        return jsonify({'error': 'Please login first'})
 
-@app.route('/user')
+@app.route('/cartSubmit')
+def cartSubmit():
+    with open('cart.json', 'r') as f:
+        cart = json.load(f)
+    if 'id' and 'name' and 'tab' not in session:
+        return render_template('cart.html', cart=cart, page="cart")
+    else:
+        userID = session['id']
+        with open('order.json', 'r') as f:
+            order = json.load(f)
+        # add cart to existing order
+        for userID in order:
+            if userID == session['id']:
+                for orderID in order[userID]:
+                    if orderID['orderId'] == 1:
+                        orderID['order'].append(cart)
+                        break
+                else:
+                    order[userID].append({"orderId": order[userID][-1]['orderId'] + 1, "order": {cart}})
+        else:
+            order.append({session['id']: {"orderId": 1, "order": {cart}}})
+
+
+@app.route('/user', methods=['GET', 'POST'])
 def get_customer_by_id():
-    print(session['id'])
     with open('user.json', 'r') as f:
         data = json.load(f)
     customers = data[session["tab"]]
     for customer in customers:
-        if customer["id"] == session['id']:
-            return render_template('user.html', tab=session['tab'], customerName=customer["name"], id=customer["id"], customerEmail=customer["email"], customerPhone=customer["phone"], customerAddress=customer["address"])
+        if session['tab'] != "deliveryPersonnel":
+            if customer["id"] == session['id']:
+                return render_template('user.html', tab=session['tab'], userName=customer["name"],
+                id=customer["id"], userEmail=customer["email"], userPhone=customer["phone"], userAddress=customer["address"])
+        else:
+            if customer["id"] == session['id']:
+                return render_template('user.html', tab=session['tab'], userName=customer["name"],
+                id=customer["id"], userEmail=customer["email"], userPhone=customer["phone"])
     return jsonify({"error": "Customer not found"})
+
+@app.route('/editProfile', methods=['POST'])
+def editUser():
+    try:
+        data = json.loads(request.data)
+        user = data['user']
+        id = data['id']
+        userName = data['userName']
+        userEmail = data['userEmail']
+        userPhone = data['userPhone']
+        
+        with open('user.json', 'r') as f:
+            data = json.load(f)
+        for editUser in data[user]:
+            if editUser['id'] == id:
+                editUser['name'] = userName
+                editUser['email'] = userEmail
+                editUser['phone'] = userPhone
+                if user != "deliveryPersonnel":
+                    userAddress = data['userAddress']
+                    editUser['address'] = userAddress
+        with open('user.json', 'w') as f:
+            json.dump(data, f)
+            
+        return jsonify({'message': 'User updated successfully'})
+    except:
+        return jsonify({'error': 'Something went wrong'})
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -145,5 +207,6 @@ def register():
                 json.dump(data, f)
         return redirect(url_for('login'))
     return render_template('register.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

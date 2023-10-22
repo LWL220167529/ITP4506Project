@@ -1,16 +1,70 @@
-{% extends "menu.html" %} 
-{% block title %}User Profile{% endblock %}
+{% extends "menu.html" %} {% block title %}User Profile{% endblock %} {% block
+content %}
+<script>
+    function editProfile() {
+        const user = document.getElementById("user").value;
+        const id = document.getElementById("id").value;
+        const userName = document.getElementsByName("userName")[0].value;
+        const userEmail = document.getElementById("userEmail").value;
+        const userPhone = document.getElementById("userPhone").value;
+        {% if tab != "deliveryPersonnel" %}
+        const userAddress = document.getElementById("userAddress").value;
+        {% endif %}
+        const data = {
+            user: user,
+            id: id,
+            userName: userName,
+            userEmail: userEmail,
+            userPhone: userPhone,
+        {% if tab != "deliveryPersonnel" %}
+            userAddress: userAddress,
+        {% endif %}
+        };
 
-{% block content %}
+        fetch("/editProfile", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((data) => alert(data.message))
+            .catch((error) => console.error(error));
+    
+    }
+</script>
 {% if tab == "customer"%}
-    <h1>{{ customerName }}'s Profile</h1>
-    <p><strong>ID:</strong> {{ id }}</p>
-    <p><strong>Email:</strong> {{ customerEmail }}</p>
-    <p><strong>Phone:</strong> {{ customerPhone }}</p>
-    <p><strong>Address:</strong> {{ customerAddress }}</p>
+<input type="hidden" id="user" name="user" value="customer" />
+<h1><input type="text" name="userName" value="{{ userName }}" />'s Profile</h1>
+<input type="text" id="id" name="id" value="{{ id }}" />
+<input type="text" id="userEmail" name="userEmail" value="{{ userEmail }}" />
+<input type="text" id="userPhone" name="userPhone" value="{{ userPhone }}" />
+<input
+    type="text"
+    id="userAddress"
+    name="userAddress"
+    value="{{ userAddress }}"
+/>
 {% elif tab == "restaurant" %}
-{% elif tap == "deliveryPersonnel" %}
+<input type="hidden" id="user" name="user" value="restaurant" />
+<h1><input type="text" name="userName" value="{{ userName }}" />'s Profile</h1>
+<input type="text" id="id" name="id" value="{{ id }}" />
+<input type="text" id="userEmail" name="userEmail" value="{{ userEmail }}" />
+<input type="text" id="userPhone" name="userPhone" value="{{ userPhone }}" />
+<input
+    type="text"
+    id="userAddress"
+    name="userAddress"
+    value="{{ userAddress }}"
+/>
+{% elif tab == "deliveryPersonnel" %}
+<input type="hidden" id="user" name="user" value="deliveryPersonnel" />
+<h1><input type="text" name="userName" value="{{ userName }}" />'s Profile</h1>
+<strong>id: </strong><input type="text" id="id" name="id" value="{{ id }}" /><br>
+<strong>Email: </strong><input type="text" id="userEmail" name="userEmail" value="{{ userEmail }}" /><br>
+<strong>Phone: </strong><input type="text" id="userPhone" name="userPhone" value="{{ userPhone }}" />
 {% endif %}
-    <!-- Add more content here based on the tab -->
-{% endblock %}
-// END: user-profile
+<!-- Add more content here based on the tab -->
+<input type="button" value="Edit Profile" onclick="editProfile()" />
+{% endblock %} // END: user-profile
