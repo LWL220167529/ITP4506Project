@@ -21,9 +21,15 @@
         body: JSON.stringify(item)
       })
       .then(response => response.json())
-      .then(data => console.log(data.mas))
-      .catch(error => console.error(error));
-    }
+      .then(data => {
+        if (data.message == "success") {
+          alert("Item added to cart");
+        } else {
+          alert("Item not added to cart");
+        }
+      })
+        .catch(error => console.error(error));
+      }
 </script>
 <div class="album py-5 bg-body-tertiary">
   <div class="container">
@@ -61,10 +67,9 @@
     <br>
     <center>
       <div id="pageNumber" class="btn-group me-2 " role="group" aria-label="First group">
-        <button type="button" class="btn btn-primary" onclick="foodpage(1)">1</button>
-        <button type="button" class="btn btn-primary" onclick="foodpage(2)">2</button>
-        <button type="button" class="btn btn-primary" onclick="foodpage(3)">3</button>
-        <button type="button" class="btn btn-primary" onclick="foodpage(4)">4</button>
+        {%for i in range(dataPage) %}
+        <button type="button" class="btn btn-primary" onclick="foodpage({{i+1}})">{{i+1}}</button>
+        {%endfor%}
       </div>
     </center>
   </div>

@@ -7,6 +7,9 @@
 	<title>My Login Page &mdash; Bootstrap 4 Login Page Snippet</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<script>
+		function home() {
+		  window.location.href = "http://127.0.0.1:5000/";
+		}
 		function changeUser(user) {
         	signUp = document.getElementById("signUp");
 			address = document.getElementById("Address");
@@ -46,6 +49,7 @@
 	</script>
 </head>
 <body class="my-login-page">
+    <button class="btn btn-primary rounded-pill px-3" type="button" onclick="home()">home</button>
 	<section class="h-100">
 		<div class="container h-100">
 			<div class="row justify-content-md-center h-100">
