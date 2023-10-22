@@ -1,254 +1,236 @@
 [
     {
-        "category": "Japan",
-        "description": "sushi description",
-        "id": 1,
-        "image": null,
-        "name": "sushi",
-        "price": "30.00",
-        "stock": 1
-    },
-    {
-        "category": "Italy",
-        "description": "pasta description",
-        "id": 2,
-        "image": null,
-        "name": "pasta",
-        "price": "29.00",
-        "stock": 1
-    },
-    {
-        "category": "USA",
-        "description": "burger description",
-        "id": 3,
-        "image": null,
-        "name": "burger",
-        "price": "12.50",
-        "stock": 1
-    },
-    {
-        "category": "Italy",
-        "description": "pizza description",
+        "category": "Japanese Food",
+        "description": "Japanese rice bowl with grilled eel.",
         "id": 4,
         "image": null,
-        "name": "pizza",
-        "price": "20.00",
-        "stock": 1
+        "name": "unadon.jpg",
+        "price": "80.00",
+        "inStock": 1
     },
     {
-        "category": "USA",
-        "description": "steak description",
-        "id": 5,
-        "image": null,
-        "name": "steak",
-        "price": "35.00",
-        "stock": 1
-    },
-    {
-        "category": "Various",
-        "description": "soup description",
+        "category": "Japanese Food",
+        "description": "Japanese curry with rice.",
         "id": 6,
-        "image": null,
-        "name": "soup",
-        "price": "8.50",
-        "stock": 1
+        "image": "katsuCurry.jpg",
+        "name": "Katsu Curry",
+        "price": "70.00",
+        "inStock": 1
     },
     {
-        "category": "Mexico",
-        "description": "tacos description",
+        "category": "Japanese Food",
+        "description": "Skewered and grilled chicken.",
         "id": 7,
-        "image": null,
-        "name": "tacos",
-        "price": "15.00",
-        "stock": 1
+        "image": "yakitori.jpg",
+        "name": "Yakitori",
+        "price": "75.00",
+        "inStock": 1
     },
     {
-        "category": "Japan",
-        "description": "sushi roll desc",
+        "category": "Japanese Food",
+        "description": "Cold soba noodles with dipping sauce.",
         "id": 8,
-        "image": null,
-        "name": "sushi roll",
-        "price": "18.00",
-        "stock": 1
+        "image": "zaruSoba.jpg",
+        "name": "Zaru Soba",
+        "price": "60.00",
+        "inStock": 1
     },
     {
-        "category": "China",
-        "description": "fried rice desc",
-        "id": 9,
-        "image": null,
-        "name": "fried rice",
-        "price": "14.00",
-        "stock": 1
-    },
-    {
-        "category": "Various",
-        "description": "salad description",
-        "id": 10,
-        "image": null,
-        "name": "salad",
-        "price": "9.00",
-        "stock": 1
-    },
-    {
-        "category": "India",
-        "description": "curry description",
-        "id": 11,
-        "image": null,
-        "name": "curry",
-        "price": "17.00",
-        "stock": 1
-    },
-    {
-        "category": "Various",
-        "description": "sandwich desc",
-        "id": 12,
-        "image": null,
-        "name": "sandwich",
-        "price": "11.00",
-        "stock": 1
-    },
-    {
-        "category": "Various",
-        "description": "ice cream desc",
-        "id": 13,
-        "image": null,
-        "name": "ice cream",
-        "price": "6.50",
-        "stock": 1
-    },
-    {
-        "category": "Japan",
-        "description": "sushi bowl desc",
-        "id": 14,
-        "image": null,
-        "name": "sushi bowl",
-        "price": "16.00",
-        "stock": 1
-    },
-    {
-        "category": "Various",
-        "description": "chicken desc",
-        "id": 15,
-        "image": null,
-        "name": "chicken",
-        "price": "13.00",
-        "stock": 1
-    },
-    {
-        "category": "Various",
-        "description": "noodles desc",
-        "id": 16,
-        "image": null,
-        "name": "noodles",
-        "price": "10.50",
-        "stock": 1
-    },
-    {
-        "category": "Various",
-        "description": "fish description",
-        "id": 17,
-        "image": null,
-        "name": "fish",
-        "price": "19.00",
-        "stock": 1
-    },
-    {
-        "category": "Various",
-        "description": "soup description",
-        "id": 18,
-        "image": null,
-        "name": "soup",
-        "price": "8.50",
-        "stock": 1
-    },
-    {
-        "category": "Mexico",
-        "description": "burrito desc",
-        "id": 19,
-        "image": null,
-        "name": "burrito",
-        "price": "14.00",
-        "stock": 1
-    },
-    {
-        "category": "Italy",
-        "description": "pizza description",
-        "id": 20,
-        "image": null,
-        "name": "pizza",
-        "price": "20.00",
-        "stock": 1
-    },
-    {
-        "category": "Various",
-        "description": "salad description",
-        "id": 21,
-        "image": null,
-        "name": "salad",
-        "price": "9.00",
-        "stock": 1
-    },
-    {
-        "category": "Japan",
-        "description": "sushi description",
-        "id": 22,
-        "image": null,
-        "name": "sushi",
-        "price": "30.00",
-        "stock": 1
-    },
-    {
-        "category": "Italy",
-        "description": "pasta description",
-        "id": 23,
-        "image": null,
-        "name": "pasta",
-        "price": "29.00",
-        "stock": 1
-    },
-    {
-        "category": "USA",
-        "description": "burger description",
+        "category": "Japanese Food",
+        "description": "Rich noodle soup with flavorful broth, meat, and various toppings.",
         "id": 24,
-        "image": null,
-        "name": "burger",
-        "price": "12.50",
-        "stock": 1
+        "image": "ramen.jpg",
+        "name": "Ramen",
+        "price": "95.00",
+        "inStock": 1
     },
     {
-        "category": "USA",
-        "description": "steak description",
+        "category": "Japanese Food",
+        "description": "Delicately hand-rolled rice with fresh fish and assorted fillings.",
+        "id": 23,
+        "image": "sushi.jpg",
+        "name": "Sushi",
+        "price": "25.00",
+        "inStock": 1
+    },
+    {
+        "category": "Thai Food",
+        "description": "Stir-fried noodles with shrimp, tofu, and peanuts.",
+        "id": 19,
+        "image": "padThai.jpg",
+        "name": "Pad Thai",
+        "price": "65.00",
+        "inStock": 1
+    },
+    {
+        "category": "Thai Food",
+        "description": "Creamy soup with coconut milk and chicken.",
+        "id": 20,
+        "image": "tomKhaGai.jpg",
+        "name": "Tom Kha Gai",
+        "price": "40.00",
+        "inStock": 1
+    },
+    {
+        "category": "Thai Food",
+        "description": "Spicy soup with lemongrass, chili, and shrimp.",
+        "id": 21,
+        "image": "tomYumKung.jpg",
+        "name": "Tom Yum Goong",
+        "price": "55.00",
+        "inStock": 1
+    },
+    {
+        "category": "Thai Food",
+        "description": "Red curry served with chicken.",
+        "id": 22,
+        "image": "redCurry.jpg",
+        "name": "Red Curry",
+        "price": "45.00",
+        "inStock": 1
+    },
+    {
+        "category": "Thai Food",
+        "description": "Stir-fried flat noodles with soy sauce and meat.",
         "id": 25,
-        "image": null,
-        "name": "steak",
-        "price": "35.00",
-        "stock": 1
+        "image": "padSeeEw.jpg",
+        "name": "Pad See Ew",
+        "price": "50.00",
+        "inStock": 1
     },
     {
-        "category": "Mexico",
-        "description": "tacos description",
+        "category": "Thai Food",
+        "description": "Spicy curry with green chili and coconut milk.",
         "id": 26,
-        "image": null,
-        "name": "tacos",
-        "price": "15.00",
-        "stock": 1
+        "image": "greenCurry.jpg",
+        "name": "Green Curry",
+        "price": "40.00",
+        "inStock": 1
     },
     {
-        "category": "Japan",
-        "description": "sushi roll desc",
-        "id": 27,
-        "image": null,
-        "name": "sushi roll",
-        "price": "18.00",
-        "stock": 1
-    },
-    {
-        "category": "China",
-        "description": "fried rice desc",
+        "category": "Fast Food",
+        "description": "Grilled beef patty with lettuce, tomato, and cheese.",
         "id": 28,
-        "image": null,
-        "name": "fried rice",
-        "price": "14.00",
-        "stock": 1
+        "image": "cheeseBurger.jpg",
+        "name": "Cheeseburger",
+        "price": "65.00",
+        "inStock": 1
+    },
+    {
+        "category": "Fast Food",
+        "description": "Crispy fried potato sticks.",
+        "id": 29,
+        "image": "frenchFries.jpg",
+        "name": "French Fries",
+        "price": "35.00",
+        "inStock": 1
+    },
+    {
+        "category": "Fast Food",
+        "description": "Deep-fried chicken drumsticks and wings.",
+        "id": 31,
+        "image": "friedChicken.jpg",
+        "name": "Fried Chicken",
+        "price": "35.00",
+        "inStock": 1
+    },
+    {
+        "category": "Fast Food",
+        "description": "Hot dog with a variety of toppings.",
+        "id": 32,
+        "image": "hotDog.jpg",
+        "name": "Hot Dog",
+        "price": "35.00",
+        "inStock": 1
+    },
+    {
+        "category": "Fast Food",
+        "description": "Melted cheese between toasted slices of bread.",
+        "id": 34,
+        "image": "sandwich.jpg",
+        "name": "Sandwich",
+        "price": "30.00",
+        "inStock": 1
+    },
+    {
+        "category": "Fast Food",
+        "description": "Soft tortilla filled with seasoned beef and cheese.",
+        "id": 35,
+        "image": "taco.jpg",
+        "name": "Taco",
+        "price": "45.00",
+        "inStock": 1
+    },
+    {
+        "category": "Chinese Food",
+        "description": "Stir-fried noodles with vegetables and meat or shrimp.",
+        "id": 37,
+        "image": "friedNoodle.jpg",
+        "name": "friedNoodle",
+        "price": "50.00",
+        "inStock": 1
+    },
+    {
+        "category": "Chinese Food",
+        "description": "Steamed dumplings filled with meat or vegetables.",
+        "id": 38,
+        "image": "dimSum.jpg",
+        "name": "Dim Sum",
+        "price": "30.00",
+        "inStock": 1
+    },
+    {
+        "category": "Chinese Food",
+        "description": "Stir-fried rice with egg, vegetables, and meat or shrimp.",
+        "id": 39,
+        "image": "friedRice.jpg",
+        "name": "Fried Rice",
+        "price": "50.00",
+        "inStock": 1
+    },
+    {
+        "category": "Chinese Food",
+        "description": "Deep-fried chicken pieces in a tangy orange sauce.",
+        "id": 40,
+        "image": "orangeChicken.jpg",
+        "name": "Orange Chicken",
+        "price": "60.00",
+        "inStock": 1
+    },
+    {
+        "category": "Chinese Food",
+        "description": "Spicy stir-fried tofu with minced meat.",
+        "id": 42,
+        "image": "mapoTofu.jpg",
+        "name": "Mapo Tofu",
+        "price": "60.00",
+        "inStock": 1
+    },
+    {
+        "category": "Chinese Food",
+        "description": "Battered pork in sweet and sour sauce with peppers and pineapple.",
+        "id": 43,
+        "image": "sweetAndSourPork.jpg",
+        "name": "Sweet and Sour Pork",
+        "price": "70.00",
+        "inStock": 1
+    },
+    {
+        "category": "Chinese Food",
+        "description": "Crispy spring rolls filled with vegetables.",
+        "id": 44,
+        "image": "springRoll.jpg",
+        "name": "Spring Rolls",
+        "price": "35.00",
+        "inStock": 1
+    },
+    {
+        "category": "Chinese Food",
+        "description": "A hearty soup with tofu, bamboo shoots, and wood ear mushrooms.",
+        "id": 45,
+        "image": "Soup.jpg",
+        "name": "Hot and Sour Soup",
+        "price": "40.00",
+        "inStock": 1
     }
 ]
