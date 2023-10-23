@@ -3,8 +3,8 @@
         "category": "Japanese Food",
         "description": "Japanese rice bowl with grilled eel.",
         "id": 4,
-        "image": "null.jpg",
-        "name": "unadon.jpg",
+        "image": "unadon.jpg",
+        "name": "Unadon",
         "price": "80.00",
         "inStock": 1
     },

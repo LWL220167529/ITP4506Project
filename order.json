@@ -10,7 +10,8 @@
           },
           { "43": 3 }
         ],
-        "status": "pending"
+        "status": "pending",
+        "total": 0
       },
       {
         "orderId": 2,
@@ -20,7 +21,8 @@
           },
           { "39": 4 }
         ],
-        "status": "pending"
+        "status": "pending",
+        "total": 0
       }
     ]
   },
@@ -35,7 +37,8 @@
           },
           { "34": 3 }
         ],
-        "status": "pending"
+        "status": "completed",
+        "total": 0
       },
       {
         "orderId": 4,
@@ -45,7 +48,8 @@
           },
           { "8": 4 }
         ],
-        "status": "pending"
+        "status": "pending",
+        "total": 0
       }
     ]
   }

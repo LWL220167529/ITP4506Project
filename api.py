@@ -308,6 +308,35 @@ def restaurantManagement():
                                    orderFoods=orderfood, name=username, id=userID, tab=tab, page="restaurantManagement")
     return redirect(url_for('login'))
 
+@app.route('/history')
+def history():
+    userID = session['id']  # get user dictionary from session
+    username = str(session['name'])  # get user dictionary from session
+    tab = session['tab']  # get user dictionary from session
+    with open('food.json', 'r') as f:
+        food = json.load(f)
+    with open('order.json', 'r') as f:
+        order = json.load(f)
+    orderfood = []
+    for customer_order in order:
+        if str(customer_order["customer"]) == str(username):
+            for order in customer_order["order"]:
+                order_details = {
+                    "orderId": order["orderId"],
+                    "food": [],
+                    "status": order["status"],
+                    "total": order["total"]
+                }
+                for order_food in order["orderFood"]:
+                    for food_id, quantity in order_food.items():
+                        order_details["food"].append({
+                            "foodId": int(food_id),
+                            "quantity": quantity
+                        })
+                orderfood.append(order_details)
+    print(orderfood)
+    return render_template('orderhistory.html', name=username, id=userID, tab=tab, orders=order, foods=food,
+                                    orderFoods=orderfood, page="history")
 
 if __name__ == '__main__':
     app.run(debug=True)
