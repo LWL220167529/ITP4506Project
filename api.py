@@ -20,7 +20,7 @@ def login():
                 session['name'] = customer['name']
                 session['tab'] = request.form['user']
                 return redirect(url_for('home'))
-        return render_template('login.html')
+        return render_template('login.html', error="Invalid email or password")
     else:
         return render_template('login.html')
 
@@ -116,35 +116,54 @@ def savefood():
         return jsonify({'error': 'Please login first'})
 
 
-@app.route('/cartSubmit')
+@app.route('/cart')
+def cart():
+    if 'id' and 'name' and 'tab' not in session:
+        return redirect(url_for('login'))
+    userID = session['id']  # get user dictionary from session
+    username = session['name']  # get user dictionary from session
+    tab = session['tab']  # get user dictionary from session
+    with open('cart.json', 'r') as f:
+        cart = json.load(f)
+    with open('food.json', 'r') as f:
+        foods = json.load(f)
+    cartFood = []
+    for foodCart in cart:
+        for foodId, quantity in foodCart.items():
+            for food in foods:
+                if int(food['id']) == int(foodId):
+                    cartFood.append(
+                        {"id": food['id'], "name": food['name'], "quantity": quantity, "price": food['price']})
+    print(cartFood)
+    return render_template('cart.html', page="cart", cart=cartFood, name=username, id=userID, tab=tab)
+
+
+@app.route('/cartSubmit', methods=['GET', 'POST'])
 def cartSubmit():
     with open('cart.json', 'r') as f:
         cart = json.load(f)
-    if 'id' and 'name' and 'tab' not in session:
-        return render_template('cart.html', cart=cart, page="cart")
-    else:
-        userID = session['id']
-        with open('order.json', 'r') as f:
-            order = json.load(f)
-        # add cart to existing order
-        for userID in order:
-            if userID["customer"] == session['id']:
-                for orderID in order["order"]:
-                    orderID.append({
-                        "orderId": order[-1]['orderId'],
-                        "orderFood": [cart],
-                        "status": "pending"
-                    })
-                    break
+    userID = session['id']
+    with open('order.json', 'r') as f:
+        order = json.load(f)
+    # add cart to existing order
+    for userID in order:
+        if userID["customer"] == session['id']:
+            for orderID in order["order"]:
+                orderID.append({
+                    "orderId": order[-1]['orderId'],
+                    "orderFood": [cart],
+                    "status": "pending"
+                })
+                break
         else:
             order.append({
                 "customer": session['id'],
                 "order": [
-                    {
-                        "orderId": 1,
-                        "orderFood": [cart],
-                        "status": "pending"
-                    }]})
+                {
+                    "orderId": 1,
+                    "orderFood": [cart],
+                    "status": "pending"
+                }]})
 
 
 @app.route('/user', methods=['GET', 'POST'])
@@ -252,7 +271,7 @@ def restaurantManagement():
                 for orderfoodfood in orderfood:
                     for orderFoods in orderID["order"]:
                         orderfoodfood['food'].append({"orderId": orderFoods["orderId"],
-                                "orderFood": []})
+                                                      "orderFood": []})
                         for orderFoodlist in orderfoodfood['food']:
                             for orderFoodslist in orderFoods["orderFood"]:
                                 if orderFoods["orderId"] == orderFoodlist["orderId"]:

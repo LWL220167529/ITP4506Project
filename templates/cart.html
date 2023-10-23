@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-
+{% extends "menu.html" %} {% block title %}Cart{% endblock %}
+{%block content %}
 <head>
     <meta charset="UTF-8">
     <title>Cart Page</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    
+
+</head>
+
+<body>
     <style>
         .quantity-controls {
             display: flex;
@@ -23,12 +26,8 @@
             align-items: center;
         }
     </style>
-</head>
-
-<body>
-
 <div class="container mt-5" style="max-width: 400px;">
-    <div class="card">
+    <form id="card" class="card">
         <div class="card-body">
             <div class="d-flex justify-content-between">
                 <h4>Your Order</h4>
@@ -38,47 +37,23 @@
 
 
             <!-- Sample items -->
+            {%for item in cart%}
         <div class="items-container">
             <div class="item-row mb-3">
+                <input type="hidden" value="{{item.id}}">
                 <button class="btn btn-light btn-sm text-danger" onclick="deleteItem(this)">X</button>
-                <span>6" cold sandwich</span>
+                <span>{{item.name}}</span>
                 <div class="quantity-controls">
                     <button class="btn btn-light btn-sm" onclick="decreaseQuantity(this)">-</button>
-                    <input type="text" value="1" style="width: 30px; text-align: center;" class="form-control form-control-sm mx-1">
+                    <input type="text" value="{{item.quantity}}" style="width: 30px; text-align: center;" class="form-control form-control-sm mx-1">
                     <button class="btn btn-light btn-sm" onclick="increaseQuantity(this)">+</button>
                 </div>
                 <div class="price-container">
-                    <strong>$25.00</strong>
+                    <strong>${{item.price}}</strong>
                 </div>
             </div>
-
-            <div class="item-row mb-3">
-                <button class="btn btn-light btn-sm text-danger" onclick="deleteItem(this)">X</button>
-                <span>Vegetable Salad</span>
-                <div class="quantity-controls">
-                    <button class="btn btn-light btn-sm" onclick="decreaseQuantity(this)">-</button>
-                    <input type="text" value="1" style="width: 30px; text-align: center;" class="form-control form-control-sm mx-1">
-                    <button class="btn btn-light btn-sm" onclick="increaseQuantity(this)">+</button>
-                </div>
-                <div class="price-container">
-                    <strong>$15.00</strong>
-                </div>
-            </div>
-
-            <div class="item-row mb-3">
-                <button class="btn btn-light btn-sm text-danger" onclick="deleteItem(this)">X</button>
-                <span>Chocolate Cake Slice</span>
-                <div class="quantity-controls">
-                    <button class="btn btn-light btn-sm" onclick="decreaseQuantity(this)">-</button>
-                    <input type="text" value="1" style="width: 30px; text-align: center;" class="form-control form-control-sm mx-1">
-                    <button class="btn btn-light btn-sm" onclick="increaseQuantity(this)">+</button>
-                </div>
-                <div class="price-container">
-                    <strong>$5.00</strong>
-                </div>
-            </div>
-
         </div>
+            {%endfor%}
             <hr>
 
             <div class="d-flex justify-content-between mb-3">
@@ -150,8 +125,8 @@
     // Initialize the cart details on page load
     window.onload = updateCartDetails;
 </script>
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-</body>
 
-</html>
+
+{% endblock %}

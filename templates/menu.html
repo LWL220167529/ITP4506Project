@@ -50,6 +50,7 @@
             {% elif tab == "restaurant" %}
               <li><a href="http://127.0.0.1:5000/restaurantManagement" class="nav-link px-2 {%if page== 'restaurantManagement'%}text-secondary{%else%}text-white{%endif%}">Management</a></li>
             {% endif %}
+              <li><a href="http://127.0.0.1:5000/cart" class="nav-link px-2 {%if page== 'cart'%}text-secondary{%else%}text-white{%endif%}">Cart</a></li>
             </ul>
             {% if page == "home" %}
               <form onsubmit="window.location.href = 'http://127.0.0.1:5000/search/'+document.getElementById('Search').value+'/1'; return false;">

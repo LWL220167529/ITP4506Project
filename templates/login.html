@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="author" content="Kodinger" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>My Login Page</title>
+    <title>Login</title>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -15,6 +15,9 @@
       function home() {
         window.location.href = "http://127.0.0.1:5000/";
       }
+      {%if error%}
+      alert("{{error}}")
+      {%endif%}
       function changeUser(user) {
         card = document.getElementById("card");
         if (user == "customer") {
@@ -281,7 +284,7 @@
                   </div>
 
                   <div class="form-group m-0">
-                    <button type="submit" class="btn btn-primary btn-block">
+                    <button type="submit" class="btn btn-primary btn-block" onclick="error()">
                       Login
                     </button>
                   </div>
