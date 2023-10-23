@@ -41,9 +41,7 @@
     {% for item in data %}
     <div id="item" class="col">
       <div class="card shadow-sm">
-        <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="${item.img}" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
-          <title>{{item.name}}</title>
-        </svg>
+        <img src="{{url_for('static', filename=item.image)}}" class="bd-placeholder-img card-img-top" width="100%" height="300" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
         <div class="card-body">
         <center><p class="card-title"><h1>{{item.name}}</h1></p></center>
         <p class="card-text">{{item.description}}</p>

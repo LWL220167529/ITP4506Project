@@ -51,19 +51,6 @@
             {% endif %}
             </ul>
             {% if page == "home" %}
-            <div class="btn-group">
-                <button type="button" class="btn btn-danger">Action</button>
-                <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                  <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">Separated link</a></li>
-                </ul>
-              </div>
               <form onsubmit="window.location.href = 'http://127.0.0.1:5000/search/'+document.getElementById('Search').value+'/1'; return false;">
                 <input id="Search" type="search" class="col-12 col-lg-auto mb-3 mb-lg-0 ms-2 text-bg-dark" placeholder="Search..." aria-label="Search" value="{{search}}" required>
                 <button type="submit" class="btn btn-primary me-lg-3">Search</button>
