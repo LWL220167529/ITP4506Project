@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cart Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .price-container {
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container mt-5" style="max-width: 400px;">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <h4>Your Order</h4>
+                <a href="#" class="text-danger" onclick="clearOrder(); return false;">Clear Order</a>
+            </div>
+            <hr>
+
+
+            <!-- Sample items -->
+        <div class="items-container">
+            <div class="item-row mb-3">
+                <button class="btn btn-light btn-sm text-danger" onclick="deleteItem(this)">X</button>
+                <span>6" cold sandwich</span>
+                <div class="quantity-controls">
+                    <button class="btn btn-light btn-sm" onclick="decreaseQuantity(this)">-</button>
+                    <input type="text" value="1" style="width: 30px; text-align: center;" class="form-control form-control-sm mx-1">
+                    <button class="btn btn-light btn-sm" onclick="increaseQuantity(this)">+</button>
+                </div>
+                <div class="price-container">
+                    <strong>$25.00</strong>
+                </div>
+            </div>
+
+            <div class="item-row mb-3">
+                <button class="btn btn-light btn-sm text-danger" onclick="deleteItem(this)">X</button>
+                <span>Vegetable Salad</span>
+                <div class="quantity-controls">
+                    <button class="btn btn-light btn-sm" onclick="decreaseQuantity(this)">-</button>
+                    <input type="text" value="1" style="width: 30px; text-align: center;" class="form-control form-control-sm mx-1">
+                    <button class="btn btn-light btn-sm" onclick="increaseQuantity(this)">+</button>
+                </div>
+                <div class="price-container">
+                    <strong>$15.00</strong>
+                </div>
+            </div>
+
+            <div class="item-row mb-3">
+                <button class="btn btn-light btn-sm text-danger" onclick="deleteItem(this)">X</button>
+                <span>Chocolate Cake Slice</span>
+                <div class="quantity-controls">
+                    <button class="btn btn-light btn-sm" onclick="decreaseQuantity(this)">-</button>
+                    <input type="text" value="1" style="width: 30px; text-align: center;" class="form-control form-control-sm mx-1">
+                    <button class="btn btn-light btn-sm" onclick="increaseQuantity(this)">+</button>
+                </div>
+                <div class="price-container">
+                    <strong>$5.00</strong>
+                </div>
+            </div>
+
+        </div>
+            <hr>
+
+            <div class="d-flex justify-content-between mb-3">
+                <strong>Delivery Fee</strong>
+                <div class="price-container">
+                    <strong id="delivery-fee">$38.45</strong>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between mb-3">
+                <h5>Total (<span id="items-count">3</span> Items)</h5>
+                <div class="price-container">
+                    <h5 id="total-price">$83.45</h5>
+                </div>
+            </div>
+
+            <button class="btn btn-danger w-100">CHECKOUT</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function increaseQuantity(button) {
+        let quantityInput = button.previousElementSibling;
+        let currentQuantity = parseInt(quantityInput.value);
+        quantityInput.value = currentQuantity + 1;
+        updateCartDetails();
+    }
+
+    function decreaseQuantity(button) {
+        let quantityInput = button.nextElementSibling;
+        let currentQuantity = parseInt(quantityInput.value);
+        if (currentQuantity > 1) {
+            quantityInput.value = currentQuantity - 1;
+        }
+        updateCartDetails();
+    }
+
+    function deleteItem(deleteBtn) {
+        let itemRow = deleteBtn.closest('.item-row');
+        itemRow.remove();
+        updateCartDetails();
+    }
+
+    function clearOrder() {
+        const itemsContainer = document.querySelector('.items-container');
+        while (itemsContainer.firstChild) {
+            itemsContainer.removeChild(itemsContainer.firstChild);
+        }
+        updateCartDetails();
+    }
+
+    function updateCartDetails() {
+        const items = document.querySelectorAll('.items-container .item-row');
+        let total = 0;
+        items.forEach(item => {
+            let priceElement = item.querySelector('.price-container strong');
+            let price = parseFloat(priceElement.innerText.substring(1));
+            let quantity = parseInt(item.querySelector('.quantity-controls input').value);
+            total += price * quantity;
+        });
+
+        const deliveryFee = parseFloat(document.querySelector('#delivery-fee').innerText.substring(1));
+        total += deliveryFee;
+
+        document.querySelector('#total-price').innerText = `$${total.toFixed(2)}`;
+        document.querySelector('#items-count').innerText = items.length.toString();
+    }
+
+    // Initialize the cart details on page load
+    window.onload = updateCartDetails;
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+
+</html>
