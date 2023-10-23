@@ -1,13 +1,15 @@
 {
-  "user1": [
+  "customer": "user1",
+  "order": [
     {
       "orderId": 1,
-      "order": [
+      "orderFood": [
         {
           "1": 9
         },
         { "2": 3 }
-      ]
+      ],
+      "status": "pending"
     },
     {
       "orderId": 2,
@@ -15,8 +17,9 @@
         {
           "1": 9
         },
-        { "2": 3 }
-      ]
+        { "2": 4 }
+      ],
+      "status": "pending"
     }
   ]
 }
