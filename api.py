@@ -135,26 +135,34 @@ def cartSubmit():
                         "orderFood": [cart],
                         "status": "pending"
                     })
+                    break
         else:
-            order.append({session['id']: {"orderId": 1, "order": {cart}}})
+            order.append({
+                "customer": session['id'],
+                "order": [
+                    {
+                        "orderId": 1,
+                        "orderFood": [cart],
+                        "status": "pending"
+                    }]})
 
 
 @app.route('/user', methods=['GET', 'POST'])
 def get_customer_by_id():
-        with open('user.json', 'r') as f:
-            data = json.load(f)
-        customers = data[session["tab"]]
-        for customer in customers:
-            if session['tab'] != "deliveryPersonnel":
-                if customer["id"] == session['id']:
-                    return render_template('user.html', tab=session['tab'], userName=customer["name"],
-                                           id=customer["id"], userEmail=customer["email"], userPhone=customer["phone"],
-                                             userAddress=customer["address"])
-            else:
-                if customer["id"] == session['id']:
-                    return render_template('user.html', tab=session['tab'], userName=customer["name"],
-                                           id=customer["id"], userEmail=customer["email"], userPhone=customer["phone"])
-        return jsonify({"error": "Customer not found"})
+    with open('user.json', 'r') as f:
+        data = json.load(f)
+    customers = data[session["tab"]]
+    for customer in customers:
+        if session['tab'] != "deliveryPersonnel":
+            if customer["id"] == session['id']:
+                return render_template('user.html', tab=session['tab'], userName=customer["name"],
+                                       id=customer["id"], userEmail=customer["email"], userPhone=customer["phone"],
+                                       userAddress=customer["address"])
+        else:
+            if customer["id"] == session['id']:
+                return render_template('user.html', tab=session['tab'], userName=customer["name"],
+                                       id=customer["id"], userEmail=customer["email"], userPhone=customer["phone"])
+    return jsonify({"error": "Customer not found"})
 
 
 @app.route('/editProfile', methods=['POST'])
@@ -235,8 +243,26 @@ def restaurantManagement():
                 order = json.load(f)
             with open('user.json', 'r') as f:
                 user = json.load(f)
-            return render_template('restaurantManagement.html', customers=user["customer"], orders=order, foods=food, name=username, id=userID,
-                                   tab=tab, page="restaurantManagement")
+            orderfood = []
+            for orderID in order:
+                orderfood.append({
+                    "customer": orderID["customer"],
+                    "food": []
+                })
+                for orderfoodfood in orderfood:
+                    for orderFoods in orderID["order"]:
+                        orderfoodfood['food'].append({"orderId": orderFoods["orderId"],
+                                "orderFood": []})
+                        for orderFoodlist in orderfoodfood['food']:
+                            for orderFoodslist in orderFoods["orderFood"]:
+                                if orderFoods["orderId"] == orderFoodlist["orderId"]:
+                                    for foodId, quantity in orderFoodslist.items():
+                                        orderFoodlist["orderFood"].append({
+                                            "foodId": int(foodId),
+                                            "quantity": quantity
+                                        })
+            return render_template('restaurantManagement.html', customers=user["customer"], orders=order, foods=food,
+                                   orderFoods=orderfood, name=username, id=userID, tab=tab, page="restaurantManagement")
     return redirect(url_for('login'))
 
 
