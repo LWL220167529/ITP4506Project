@@ -40,13 +40,12 @@
             {%for item in cart%}
         <div class="items-container">
             <div class="item-row mb-3">
-                <input type="hidden" value="{{item.id}}">
-                <button class="btn btn-light btn-sm text-danger" onclick="deleteItem(this)">X</button>
+                <button class="btn btn-light btn-sm text-danger" value="{{item.id}}" onclick="deleteItem(this)">X</button>
                 <span>{{item.name}}</span>
                 <div class="quantity-controls">
-                    <button class="btn btn-light btn-sm" onclick="decreaseQuantity(this)">-</button>
+                    <button class="btn btn-light btn-sm" value="{{item.id}}" onclick="decreaseQuantity(this)">-</button>
                     <input type="text" value="{{item.quantity}}" style="width: 30px; text-align: center;" class="form-control form-control-sm mx-1">
-                    <button class="btn btn-light btn-sm" onclick="increaseQuantity(this)">+</button>
+                    <button class="btn btn-light btn-sm" value="{{item.id}}" onclick="increaseQuantity(this)">+</button>
                 </div>
                 <div class="price-container">
                     <strong>${{item.price}}</strong>
@@ -77,16 +76,20 @@
 <script>
     function increaseQuantity(button) {
         let quantityInput = button.previousElementSibling;
+        var id = button.value;
         let currentQuantity = parseInt(quantityInput.value);
         quantityInput.value = currentQuantity + 1;
+        window.location.href = "http://127.0.0.1:5000/editCart?id=" +id+"&quantity="+quantityInput.value+"&action=edit";
         updateCartDetails();
     }
-
+ 
     function decreaseQuantity(button) {
         let quantityInput = button.nextElementSibling;
+        var id = button.value;
         let currentQuantity = parseInt(quantityInput.value);
         if (currentQuantity > 1) {
             quantityInput.value = currentQuantity - 1;
+            window.location.href = "http://127.0.0.1:5000/editCart?id=" +id+"&quantity="+quantityInput.value+"&action=edit";
         }
         updateCartDetails();
     }
@@ -94,6 +97,8 @@
     function deleteItem(deleteBtn) {
         let itemRow = deleteBtn.closest('.item-row');
         itemRow.remove();
+        var id = deleteBtn.value;
+        window.location.href = "http://127.0.0.1:5000/editCart?id=" +id+"&quantity=0&action=delete";
         updateCartDetails();
     }
 

@@ -134,9 +134,31 @@ def cart():
                 if int(food['id']) == int(foodId):
                     cartFood.append(
                         {"id": food['id'], "name": food['name'], "quantity": quantity, "price": food['price']})
-    print(cartFood)
     return render_template('cart.html', page="cart", cart=cartFood, name=username, id=userID, tab=tab)
 
+@app.route('/editCart', methods=['GET','POST'])
+def editCart():
+    with open('cart.json', 'r') as f:
+        cart = json.load(f)
+    id = request.args.get("id")
+    quantity = request.args.get("quantity")
+    action = request.args.get("action")
+    if action == "edit":
+        for item in cart:
+            if id in item:
+                item[id] = quantity
+                break
+        with open('cart.json', 'w') as f:
+            json.dump(cart, f)
+    elif action == "delete":
+        for item in cart:
+            if id in item:
+                cart.remove(item)
+                break
+        with open('cart.json', 'w') as f:
+            json.dump(cart, f)
+    return redirect(url_for('cart'))
+    
 
 @app.route('/cartSubmit', methods=['GET', 'POST'])
 def cartSubmit():
@@ -164,6 +186,8 @@ def cartSubmit():
                     "orderFood": [cart],
                     "status": "pending"
                 }]})
+    with open('order.json', 'w') as f:
+                json.dump(order, f)
 
 
 @app.route('/user', methods=['GET', 'POST'])
