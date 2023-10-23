@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+    <div class="row">
+
+        <!-- Left Side -->
+        <div class="col-md-7 mb-4">
+
+            <!-- Delivery Address Box -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h6 class="mb-3">Delivery address</h6>
+                    <div><strong>Tseung Kwan O</strong></div>
+                    <div class="mt-2">
+                        <button class="btn btn-outline-danger btn-sm">Change</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Box -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h6 class="mb-3">Payment</h6>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="paymentOption" id="creditCard" data-bs-toggle="collapse" data-bs-target="#creditCardDetails" aria-expanded="false" aria-controls="creditCardDetails">
+                        <label class="form-check-label" for="creditCard">
+                            Credit or Debit Card
+                        </label>
+                    </div>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="radio" name="paymentOption" id="cashOnDelivery" data-bs-toggle="collapse" data-bs-target="#creditCardDetails" aria-expanded="false" aria-controls="creditCardDetails">
+                        <label class="form-check-label" for="cashOnDelivery">
+                            Cash on Delivery
+                        </label>
+                    </div>
+
+                    <!-- Credit Card Details (Hidden until Credit Card option is selected) -->
+                    <div class="collapse mt-3" id="creditCardDetails">
+                        <div class="form-group mb-2">
+                            <label for="cardNumber">Card number</label>
+                            <input type="text" class="form-control" id="cardNumber">
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group mb-2">
+                                    <label for="expiryDate">MM/YY</label>
+                                    <input type="text" class="form-control" id="expiryDate">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group mb-2">
+                                    <label for="cvc">CVC</label>
+                                    <input type="text" class="form-control" id="cvc">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="cardHolderName">Name of the card holder</label>
+                            <input type="text" class="form-control" id="cardHolderName">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Place Order Button -->
+            <button class="btn btn-danger w-100">Place order</button>
+
+        </div>
+
+        <!-- Right Side -->
+        <div class="col-md-5">
+
+            <!-- Order Details Box -->
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="mb-3">Your order from</h6>
+                    <div><strong>So Gor Beef Brisket (Tseung Kwan O)</strong></div>
+                    <div class="my-3">
+                        <div>1 x Iced Ovaltine <strong class="float-end">HK$ 24</strong></div>
+                        <div>1 x Rice with Beef Brisket in Soup + Fish Balls <strong class="float-end">HK$ 83</strong></div>
+                    </div>
+                    <div>
+                        <div>Subtotal <strong class="float-end">HK$ 107</strong></div>
+                        <div>Delivery fee <strong class="float-end">HK$ 5</strong></div>
+                    </div>
+                    <hr>
+                    <div>
+                        <h6>Total <strong class="float-end">HK$ 88</strong></h6>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+
+</html>
