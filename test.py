@@ -12,3 +12,28 @@
                     order[userID].append({"orderId": order[userID][-1]['orderId'] + 1, "order": [cart], "status": "pending"})
         else:
             order.append({session['id']: {"orderId": 1, "order": {cart}}})
+
+
+
+
+
+{%if foods%} {% for item in foods %}
+          <tr>
+            <td>
+              <img
+                src="{{url_for('static', filename=item.image)}}"
+                alt="{{item.image}}"
+                width="50"
+                height="50"
+              />
+            </td>
+            <td>{{item.name}}</td>
+            <td>{{item.category}}</td>
+            <td>{{item.description}}</td>
+            <td>${{item.price}}</td>
+            <td>
+              <button class="btn btn-sm btn-warning">Edit</button>
+              <button class="btn btn-sm btn-danger">Delete</button>
+            </td>
+          </tr>
+          {%endfor%} {% endif %}

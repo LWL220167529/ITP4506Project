@@ -1,25 +1,52 @@
-{
-  "customer": "user1",
-  "order": [
-    {
-      "orderId": 1,
-      "orderFood": [
-        {
-          "1": 9
-        },
-        { "2": 3 }
-      ],
-      "status": "pending"
-    },
-    {
-      "orderId": 2,
-      "order": [
-        {
-          "1": 9
-        },
-        { "2": 4 }
-      ],
-      "status": "pending"
-    }
-  ]
-}
+[
+  {
+    "customer": "user1",
+    "order": [
+      {
+        "orderId": 1,
+        "orderFood": [
+          {
+            "45": 9
+          },
+          { "43": 3 }
+        ],
+        "status": "pending"
+      },
+      {
+        "orderId": 2,
+        "orderFood": [
+          {
+            "40": 9
+          },
+          { "39": 4 }
+        ],
+        "status": "pending"
+      }
+    ]
+  },
+  {
+    "customer": "123",
+    "order": [
+      {
+        "orderId": 3,
+        "orderFood": [
+          {
+            "37": 9
+          },
+          { "34": 3 }
+        ],
+        "status": "pending"
+      },
+      {
+        "orderId": 4,
+        "orderFood": [
+          {
+            "23": 9
+          },
+          { "8": 4 }
+        ],
+        "status": "pending"
+      }
+    ]
+  }
+]
