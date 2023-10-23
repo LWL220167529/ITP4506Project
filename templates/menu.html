@@ -44,10 +44,11 @@
             {% if id %}
               <li><a href="http://127.0.0.1:5000/user" class="nav-link px-2 text-white">Welcome {{name}}</a></li>
             {% endif %}
-              <li><a href="http://127.0.0.1:5000/" class="nav-link px-2 text-secondary">Home</a></li>
+              <li><a href="http://127.0.0.1:5000/" class="nav-link px-2 {%if page== 'home'%}text-secondary{%else%}text-white{%endif%}">Home</a></li>
             {% if tab == "customer"%}
               <li><a href="#" class="nav-link px-2 text-white">History</a></li>
             {% elif tab == "restaurant" %}
+              <li><a href="http://127.0.0.1:5000/restaurantManagement" class="nav-link px-2 {%if page== 'restaurantManagement'%}text-secondary{%else%}text-white{%endif%}">Management</a></li>
             {% endif %}
             </ul>
             {% if page == "home" %}
