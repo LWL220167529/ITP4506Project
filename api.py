@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, render_template, redirect, url_for, s
 from flask_cors import CORS
 import json
     
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__, template_folder='templates', static_folder='image')
 app.secret_key = 'id'
 app.secret_key = 'name'
 app.secret_key = 'tab'
