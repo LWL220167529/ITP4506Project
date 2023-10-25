@@ -118,22 +118,18 @@ def savefood():
 
 @app.route('/cart')
 def cart():
-    if 'id' and 'name' and 'tab' not in session:
+    if not all(key in session for key in ['id', 'name', 'tab']):
         return redirect(url_for('login'))
-    userID = session['id']  # get user dictionary from session
-    username = session['name']  # get user dictionary from session
-    tab = session['tab']  # get user dictionary from session
+    userID, username, tab = session['id'], session['name'], session['tab']
     with open('cart.json', 'r') as f:
         cart = json.load(f)
     with open('food.json', 'r') as f:
         foods = json.load(f)
-    cartFood = []
-    for foodCart in cart:
-        for foodId, quantity in foodCart.items():
-            for food in foods:
-                if int(food['id']) == int(foodId):
-                    cartFood.append(
-                        {"id": food['id'], "name": food['name'], "quantity": quantity, "price": food['price']})
+    cartFood = [{"id": food['id'], "name": food['name'], "quantity": quantity, "price": food['price']}
+                for foodCart in cart
+                for foodId, quantity in foodCart.items()
+                for food in foods
+                if int(food['id']) == int(foodId)]
     return render_template('cart.html', page="cart", cart=cartFood, name=username, id=userID, tab=tab)
 
 @app.route('/editCart', methods=['GET','POST'])
@@ -151,43 +147,59 @@ def editCart():
         with open('cart.json', 'w') as f:
             json.dump(cart, f)
     elif action == "delete":
-        for item in cart:
-            if id in item:
-                cart.remove(item)
-                break
+        cart = [item for item in cart if id not in item]
         with open('cart.json', 'w') as f:
             json.dump(cart, f)
     return redirect(url_for('cart'))
-    
 
-@app.route('/cartSubmit', methods=['GET', 'POST'])
+@app.route('/clearCart', methods=['GET', 'POST'])
+def clearCart():
+    with open('cart.json', 'w') as f:
+        json.dump([], f)
+    return redirect(url_for('cart'))
+
+@app.route('/cartSubmit', methods=['POST'])
 def cartSubmit():
-    with open('cart.json', 'r') as f:
-        cart = json.load(f)
-    userID = session['id']
-    with open('order.json', 'r') as f:
-        order = json.load(f)
-    # add cart to existing order
-    for userID in order:
-        if userID["customer"] == session['id']:
-            for orderID in order["order"]:
-                orderID.append({
-                    "orderId": order[-1]['orderId'],
-                    "orderFood": [cart],
-                    "status": "pending"
-                })
-                break
+    try:
+        # Load cart and order data
+        with open('cart.json', 'r') as cart_file, open('order.json', 'r') as order_file:
+            cart = json.load(cart_file)
+            order = json.load(order_file)
+
+        # Check if there is an existing order for the customer
+        customer_id = session['id']
+        existing_order = next((o for o in order if o['customer'] == customer_id), None)
+
+        # If there is an existing order, add the cart to it
+        if existing_order:
+            existing_order['order'].append({
+                'orderId': existing_order['order'][-1]['orderId'] + 1,
+                'orderFood': cart,
+                'status': 'pending'
+            })
+        # If there is no existing order, create a new one
         else:
             order.append({
-                "customer": session['id'],
-                "order": [
-                {
-                    "orderId": 1,
-                    "orderFood": [cart],
-                    "status": "pending"
-                }]})
-    with open('order.json', 'w') as f:
-                json.dump(order, f)
+                'customer': customer_id,
+                'order': [{
+                    'orderId': 1,
+                    'orderFood': cart,
+                    'status': 'pending'
+                }]
+            })
+
+        # Save the updated order data
+        with open('order.json', 'w') as order_file:
+            json.dump(order, order_file)
+
+        # Clear the cart
+        with open('cart.json', 'w') as cart_file:
+            json.dump([], cart_file)
+
+        # Redirect to the cart page
+        return redirect(url_for('cart'))
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
 
 @app.route('/user', methods=['GET', 'POST'])
@@ -196,13 +208,12 @@ def get_customer_by_id():
         data = json.load(f)
     customers = data[session["tab"]]
     for customer in customers:
-        if session['tab'] != "deliveryPersonnel":
-            if customer["id"] == session['id']:
+        if customer["id"] == session['id']:
+            if session['tab'] != "deliveryPersonnel":
                 return render_template('user.html', tab=session['tab'], userName=customer["name"],
                                        id=customer["id"], userEmail=customer["email"], userPhone=customer["phone"],
-                                       userAddress=customer["address"])
-        else:
-            if customer["id"] == session['id']:
+                                       userAddress=customer.get("address"))
+            else:
                 return render_template('user.html', tab=session['tab'], userName=customer["name"],
                                        id=customer["id"], userEmail=customer["email"], userPhone=customer["phone"])
     return jsonify({"error": "Customer not found"})
@@ -234,42 +245,32 @@ def editUser():
             json.dump(data, f)
 
         return jsonify({'message': 'User updated successfully'})
-    except:
-        return jsonify({'error': 'Something went wrong'})
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        print(request.form['user'])
-        if request.form['user'] != 'deliveryPersonnel':
-            with open('user.json', 'r') as f:
-                data = json.load(f)
-            new_user = {
-                "id": request.form['id'],
-                "name": request.form['name'],
-                "email": request.form['email'],
-                "phone": request.form['phone'],
-                "address": request.form['address'],
-                "password": request.form['password']
-            }
-            data[request.form['user']].append(new_user)
-            with open('user.json', 'w') as f:
-                json.dump(data, f)
-        else:
-            with open('user.json', 'r') as f:
-                data = json.load(f)
-            new_user = {
+        try:
+            user_type = request.form['user']
+            user_data = {
                 "id": request.form['id'],
                 "name": request.form['name'],
                 "email": request.form['email'],
                 "phone": request.form['phone'],
                 "password": request.form['password']
             }
-            data[request.form['user']].append(new_user)
+            if user_type != 'deliveryPersonnel':
+                user_data["address"] = request.form['address']
+            with open('user.json', 'r') as f:
+                data = json.load(f)
+            data[user_type].append(user_data)
             with open('user.json', 'w') as f:
                 json.dump(data, f)
-        return redirect(url_for('login'))
+            return redirect(url_for('login'))
+        except Exception as e:
+            return jsonify({'error': str(e)})
     return render_template('register.html')
 
 
@@ -286,32 +287,39 @@ def restaurantManagement():
                 order = json.load(f)
             with open('user.json', 'r') as f:
                 user = json.load(f)
-            orderfood = []
-            for orderID in order:
-                orderfood.append({
-                    "customer": orderID["customer"],
+            result = []
+
+            for order_entry in order:
+                customer_detail = {
+                    "customer": order_entry["customer"],
                     "food": []
-                })
-                for orderfoodfood in orderfood:
-                    for orderFoods in orderID["order"]:
-                        orderfoodfood['food'].append({"orderId": orderFoods["orderId"],
-                                                      "orderFood": []})
-                        for orderFoodlist in orderfoodfood['food']:
-                            for orderFoodslist in orderFoods["orderFood"]:
-                                if orderFoods["orderId"] == orderFoodlist["orderId"]:
-                                    for foodId, quantity in orderFoodslist.items():
-                                        orderFoodlist["orderFood"].append({
-                                            "foodId": int(foodId),
-                                            "quantity": quantity
-                                        })
-            return render_template('restaurantManagement.html', customers=user["customer"], orders=order, foods=food,
-                                   orderFoods=orderfood, name=username, id=userID, tab=tab, page="restaurantManagement")
+                }
+
+                for order in order_entry["order"]:
+                    food_list = []
+
+                    for order_food in order["orderFood"]:
+                        for food_id, quantity in order_food.items():
+                            food_list.append({
+                                "foodId": int(food_id),
+                                "quantity": quantity
+                            })
+
+                    customer_detail["food"].append({
+                        "orderId": order["orderId"],
+                        "orderFood": food_list
+                    })
+
+                result.append(customer_detail)
+            print(result)
+            return render_template('restaurantManagement.html', customers=user["customer"], foods=food,
+                                   orderFoods=result, name=username, id=userID, tab=tab, page="restaurantManagement")
     return redirect(url_for('login'))
 
 @app.route('/history')
 def history():
     userID = session['id']  # get user dictionary from session
-    username = str(session['name'])  # get user dictionary from session
+    username = session['name']  # get user dictionary from session
     tab = session['tab']  # get user dictionary from session
     with open('food.json', 'r') as f:
         food = json.load(f)
@@ -328,13 +336,12 @@ def history():
                     "total": order["total"]
                 }
                 for order_food in order["orderFood"]:
-                    for food_id, quantity in order_food.items():
-                        order_details["food"].append({
-                            "foodId": int(food_id),
-                            "quantity": quantity
-                        })
+                    food_id, quantity = list(order_food.items())[0]
+                    order_details["food"].append({
+                        "foodId": int(food_id),
+                        "quantity": quantity
+                    })
                 orderfood.append(order_details)
-    print(orderfood)
     return render_template('orderhistory.html', name=username, id=userID, tab=tab, orders=order, foods=food,
                                     orderFoods=orderfood, page="history")
 

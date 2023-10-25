@@ -46,6 +46,25 @@
 
         <!-- Active Orders -->
         <h4 class="mb-4">Active orders</h4>
+        {%for order in orderFoods%}
+        {%if order.status != "completed"%}
+        <div class="order-card d-flex align-items-center">
+            <div class="flex-grow-1">
+                <input type="hidden" value="{{order.orderId}}">
+                {%for food in order.food%}
+                <p class="mb-1">{% for
+                    item in foods %}{%if item.id == food.foodId%}
+                    <p class="mb-1">{{item.name}}
+                    {%endif%}{%endfor%}
+                    x {{food.quantity}}</p>
+                {%endfor%}
+            </div>
+            <div class="text-end">
+                <p class="price">HK$ {{order.total}}</p>
+            </div>
+        </div>
+        {%endif%}
+        {%endfor%}
         <p>You have no active orders.</p>
 
         <!-- Past Orders -->

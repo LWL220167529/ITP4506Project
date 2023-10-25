@@ -143,21 +143,20 @@
           </thead>
           <tbody>
             <!-- Sample order details -->
-            {%if orders%} {% for user in orders %} {% for order in user.order %}
+            {% for order in orderFoods %}
+            {%for customerOrder in order.food%}
             <tr>
-              <td>{{order.orderId}}</td>
-              <td>
-                {%for users in customers%}{%if users.id ==
-                user.customer%}{{users.name}}{%endif%}{%endfor%}
+              <td>{{customerOrder.orderId}}</td>
+              <td>{%for user in customers%}{%if user.id == order.customer%}{{user.name}}{%endif%}{%endfor%}
               </td>
               <td>
-                {%for orderFood in orderFoods%}{%if orderFood.customer ==
-                user.customer%}{%for food in orderFood.food%} {%if food.orderId
-                == order.orderId%}{%for orderFoodlist in food.orderFood%} {% for
-                item in foods %}{%if item.id == orderFoodlist.foodId%}
-                <p>{{item.name}}</p>
-                {%endif%}{%endfor%}
-                {%endfor%}{%endif%}{%endfor%}{%endif%}{%endfor%}
+                {%for food in customerOrder.orderFood%}
+                {%for item in foods%}
+                {%if item.id == food.foodId%}
+                <p>{{item.name}} x {{food.quantity}}</p>
+                {%endif%}
+                {%endfor%}
+                {%endfor%}
               </td>
               <td>$20</td>
               <td><span class="badge bg-warning text-dark">Pending</span></td>
@@ -166,7 +165,8 @@
                 <button class="btn btn-sm btn-danger">Cancel</button>
               </td>
             </tr>
-            {%endfor%} {%endfor%} {% endif %}
+            {%endfor%}
+            {%endfor%}
             <!-- Add more orders as needed -->
           </tbody>
         </table>

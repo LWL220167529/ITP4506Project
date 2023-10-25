@@ -29,8 +29,16 @@
       "name": "123",
       "email": "132@asd.com",
       "phone": "12345679",
-      "address": "",
+      "address": "123",
       "password": "123"
+    },
+    {
+      "id": "321",
+      "name": "312",
+      "email": "312@321.com",
+      "phone": "321",
+      "password": "1",
+      "address": "321"
     }
   ],
   "restaurant": [
@@ -65,13 +73,6 @@
       "name": "deliveryPersonnel2",
       "password": "2",
       "phone": "12784653"
-    },
-    {
-      "id": "123",
-      "name": "123",
-      "email": "132@asd.com",
-      "phone": "12345679",
-      "password": "123"
     }
   ]
 }
