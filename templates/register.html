@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="author" content="Kodinger">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
-	<title>My Login Page &mdash; Bootstrap 4 Login Page Snippet</title>
+	<title>register</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<script>
 		function home() {
@@ -14,6 +14,8 @@
         	signUp = document.getElementById("signUp");
 			address = document.getElementById("Address");
 			userTab = document.getElementById("user");
+			lblName = document.getElementById("lblName");
+			lblName.innerHTML = "Name";
 	        if (user == "customer") {
 				signUp.innerHTML = `<div class="mt-4 text-center">
 							Do you want to sing up restaurant account? <a href="#" onclick="changeUser('restaurant')">Sign Up</a>
@@ -33,6 +35,7 @@
 							</div>`;
 				title.innerHTML = "Restaurant Register";
 				userTab.value = "restaurant";
+				lblName.innerHTML = "Restaurant Name";
 				address.style.display = "block";
 			} else if (user == "deliveryPersonnel") {
 				signUp.innerHTML= `<div class="mt-4 text-center">
@@ -60,7 +63,7 @@
 							<form id="userForm" method="POST" class="my-login-validation" novalidate="">
 								<input id="user" type="hidden" name="user" value="customer"> <!-- This is the user type -->
 								<div class="form-group">
-									<label for="name">Name</label>
+									<label id="lblName" for="name">Name</label>
 									<input id="name" type="text" class="form-control" name="name" required autofocus>
 									<div class="invalid-feedback">
 										What's your name?
