@@ -68,12 +68,16 @@
                 </div>
             </div>
 
-            <button class="btn btn-danger w-100">CHECKOUT</button>
+            <input type="button" class="btn btn-danger w-100" onclick="submitCart()" value="CHECKOUT"/>
         </div>
     </div>
 </div>
 
 <script>
+    function submitCart() {
+        window.location.href="http://127.0.0.1:5000/checkout";
+    }
+
     function increaseQuantity(button) {
         let quantityInput = button.previousElementSibling;
         var id = button.value;
