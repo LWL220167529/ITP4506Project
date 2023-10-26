@@ -4,25 +4,19 @@
     "order": [
       {
         "orderId": 1,
-        "orderFood": [
-          {
-            "45": 9
-          },
-          { "43": 3 }
-        ],
+        "orderFood": [{ "45": 9 }, { "43": 3 }],
         "status": "pending",
-        "total": 0
+        "total": 0,
+        "raating": "",
+        "deliveryAddress": ""
       },
       {
         "orderId": 2,
-        "orderFood": [
-          {
-            "40": 9
-          },
-          { "39": 4 }
-        ],
+        "orderFood": [{ "40": 9 }, { "39": 4 }],
         "status": "pending",
-        "total": 0
+        "total": 0,
+        "raating": "",
+        "deliveryAddress": ""
       }
     ]
   },
@@ -31,25 +25,26 @@
     "order": [
       {
         "orderId": 3,
-        "orderFood": [
-          {
-            "37": 9
-          },
-          { "34": 3 }
-        ],
+        "orderFood": [{ "37": 9 }, { "34": 3 }],
         "status": "completed",
-        "total": 0
+        "total": 0,
+        "raating": "",
+        "deliveryAddress": ""
       },
       {
         "orderId": 4,
-        "orderFood": [
-          {
-            "23": 9
-          },
-          { "8": 4 }
-        ],
+        "orderFood": [{ "23": 9 }, { "8": 4 }],
         "status": "pending",
-        "total": 0
+        "total": 0,
+        "raating": "",
+        "deliveryAddress": ""
+      },
+      {
+        "orderId": 5,
+        "orderFood": [{ "6": "5" }, { "23": "5" }, { "39": "5" }],
+        "status": "pending",
+        "raating": "",
+        "deliveryAddress": "123"
       }
     ]
   }

@@ -158,48 +158,77 @@ def clearCart():
         json.dump([], f)
     return redirect(url_for('cart'))
 
-@app.route('/cartSubmit', methods=['POST'])
-def cartSubmit():
+@app.route('/cartSubmit', methods=['GET','POST'])
+def cart_submit():
     try:
+        address = request.args.get("address")
         # Load cart and order data
         with open('cart.json', 'r') as cart_file, open('order.json', 'r') as order_file:
-            cart = json.load(cart_file)
-            order = json.load(order_file)
+            cart_data = json.load(cart_file)
+            order_data = json.load(order_file)
 
         # Check if there is an existing order for the customer
         customer_id = session['id']
-        existing_order = next((o for o in order if o['customer'] == customer_id), None)
+        existing_order = next((o for o in order_data if o['customer'] == customer_id), None)
 
         # If there is an existing order, add the cart to it
         if existing_order:
             existing_order['order'].append({
                 'orderId': existing_order['order'][-1]['orderId'] + 1,
-                'orderFood': cart,
-                'status': 'pending'
+                'orderFood': cart_data,
+                'status': 'pending',
+                "raating": "",
+                "deliveryAddress": address
             })
         # If there is no existing order, create a new one
         else:
-            order.append({
+            order_data.append({
                 'customer': customer_id,
                 'order': [{
                     'orderId': 1,
-                    'orderFood': cart,
-                    'status': 'pending'
+                    'orderFood': cart_data,
+                    'status': 'pending',
+                    "raating": "",
+                    "deliveryAddress": address
                 }]
             })
 
         # Save the updated order data
         with open('order.json', 'w') as order_file:
-            json.dump(order, order_file)
+            json.dump(order_data, order_file)
 
         # Clear the cart
         with open('cart.json', 'w') as cart_file:
             json.dump([], cart_file)
 
         # Redirect to the cart page
-        return redirect(url_for('cart'))
+        return redirect(url_for('home'))
     except Exception as e:
-        return jsonify({"error": str(e)})
+        return jsonify({"error": str(e)}), 500
+    
+@app.route('/checkout')
+def checkout():
+    if not all(key in session for key in ['id', 'name', 'tab']):
+        return redirect(url_for('login'))
+    userID, username, tab = session['id'], session['name'], session['tab']
+    with open('cart.json', 'r') as f:
+        cart = json.load(f)
+    with open('food.json', 'r') as f:
+        foods = json.load(f)
+    cartFood = [{"id": food['id'], "name": food['name'], "quantity": int(quantity), "price": float(food['price'])}
+                for foodCart in cart
+                for foodId, quantity in foodCart.items()
+                for food in foods
+                if int(food['id']) == int(foodId)]
+    total_price = sum([item['price'] * item['quantity'] for item in cartFood])
+    with open('user.json', 'r') as f:
+        data = json.load(f)
+    customers = data[session["tab"]]
+    for customer in customers:
+        if customer["id"] == session['id']:
+            user_address = customer.get("address")
+            break
+    return render_template('checkout.html', page="checkout", user_address=user_address, cart=cartFood, total_price=total_price)
 
 
 @app.route('/user', methods=['GET', 'POST'])
@@ -307,7 +336,10 @@ def restaurantManagement():
 
                     customer_detail["food"].append({
                         "orderId": order["orderId"],
-                        "orderFood": food_list
+                        "orderFood": food_list,
+                        "status": order["status"],
+                        "raating": order["raating"],
+                        "total": order["total"]
                     })
 
                 result.append(customer_detail)
@@ -333,14 +365,17 @@ def history():
                     "orderId": order["orderId"],
                     "food": [],
                     "status": order["status"],
-                    "total": order["total"]
+                    "total": 0
                 }
                 for order_food in order["orderFood"]:
                     food_id, quantity = list(order_food.items())[0]
+                    food_price = next((item for item in food if item["id"] == int(food_id)), None)["price"]
                     order_details["food"].append({
                         "foodId": int(food_id),
-                        "quantity": quantity
+                        "quantity": quantity,
+                        "price": float(food_price) # convert price to float
                     })
+                    order_details["total"] += float(food_price) * int(quantity) # convert price to float
                 orderfood.append(order_details)
     return render_template('orderhistory.html', name=username, id=userID, tab=tab, orders=order, foods=food,
                                     orderFoods=orderfood, page="history")

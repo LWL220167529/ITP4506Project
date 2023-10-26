@@ -1,14 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Checkout Page</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-</head>
-
+{% extends "menu.html" %} {% block title %}Checkout Page{% endblock %}
+{%block content %}
 <body class="bg-light">
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<script>
+    function onPlaceOrderClick() {
+        var address = document.getElementById("address").value;
+        window.location.href="http://127.0.0.1:5000/cartSubmit?address=" + address;
+    }
+</script>
 <div class="container mt-5">
 
     <div class="row">
@@ -20,10 +19,7 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <h6 class="mb-3">Delivery address</h6>
-                    <div><strong>Tseung Kwan O</strong></div>
-                    <div class="mt-2">
-                        <button class="btn btn-outline-danger btn-sm">Change</button>
-                    </div>
+                    <div><strong><textarea class="col-12" id="address" type="text">{{user_address}}</textarea></strong></div>
                 </div>
             </div>
 
@@ -74,7 +70,7 @@
             </div>
 
             <!-- Place Order Button -->
-            <button class="btn btn-danger w-100">Place order</button>
+            <input type="button" onclick="onPlaceOrderClick()" class="btn btn-danger w-100" value="Place order"/>
 
         </div>
 
@@ -87,16 +83,16 @@
                     <h6 class="mb-3">Your order from</h6>
                     <div><strong>So Gor Beef Brisket (Tseung Kwan O)</strong></div>
                     <div class="my-3">
-                        <div>1 x Iced Ovaltine <strong class="float-end">HK$ 24</strong></div>
-                        <div>1 x Rice with Beef Brisket in Soup + Fish Balls <strong class="float-end">HK$ 83</strong></div>
+                    {%for item in cart%}
+                        <div>{{item.quantity}} x {{item.name}} <strong class="float-end">HK$ {{item.price}}</strong></div>
+                    {%endfor%}
                     </div>
                     <div>
-                        <div>Subtotal <strong class="float-end">HK$ 107</strong></div>
                         <div>Delivery fee <strong class="float-end">HK$ 5</strong></div>
                     </div>
                     <hr>
                     <div>
-                        <h6>Total <strong class="float-end">HK$ 88</strong></h6>
+                        <h6>Total <strong class="float-end">HK$ {{total_price}}</strong></h6>
                     </div>
                 </div>
             </div>
@@ -107,6 +103,5 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-</body>
 
-</html>
+{% endblock %}

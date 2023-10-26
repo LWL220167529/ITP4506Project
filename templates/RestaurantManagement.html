@@ -158,8 +158,8 @@
                 {%endfor%}
                 {%endfor%}
               </td>
-              <td>$20</td>
-              <td><span class="badge bg-warning text-dark">Pending</span></td>
+              <td>${{customerOrder.total}}</td>
+              <td><span class="badge bg-warning text-dark">{{customerOrder.status}}</span></td>
               <td>
                 <button class="btn btn-sm btn-success">Confirm</button>
                 <button class="btn btn-sm btn-danger">Cancel</button>
