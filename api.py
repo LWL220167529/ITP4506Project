@@ -202,7 +202,7 @@ def cart_submit():
             json.dump([], cart_file)
 
         # Redirect to the cart page
-        return redirect(url_for('home'))
+        return redirect(url_for('orderStatus'))
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
@@ -230,6 +230,39 @@ def checkout():
             break
     return render_template('checkout.html', page="checkout", user_address=user_address, cart=cartFood, total_price=total_price)
 
+
+@app.route('/orderStatus')
+def orderStatus():
+    if not all(key in session for key in ['id', 'name', 'tab']):
+        return redirect(url_for('login'))
+    userID, username, tab = session['id'], session['name'], session['tab']
+    with open('food.json', 'r') as f:
+        food = json.load(f)
+    with open('order.json', 'r') as f:
+        order = json.load(f)
+    orderfood = []
+    for customer_order in order:
+        if str(customer_order["customer"]) == str(username):
+            for order in customer_order["order"]:
+                order_details = {
+                    "orderId": order["orderId"],
+                    "food": [],
+                    "status": order["status"],
+                    "total": 0,
+                    "deliveryAddress": order["deliveryAddress"]
+                }
+                for order_food in order["orderFood"]:
+                    food_id, quantity = list(order_food.items())[0]
+                    food_price = next((item for item in food if item["id"] == int(food_id)), None)["price"]
+                    order_details["food"].append({
+                        "foodId": int(food_id),
+                        "quantity": quantity,
+                        "price": float(food_price) # convert price to float
+                    })
+                    order_details["total"] += float(food_price) * int(quantity) # convert price to float
+                orderfood.append(order_details)
+    return render_template('orderstatus.html', page="orderStatus", name=username, id=userID, tab=tab, orders=order, foods=food,
+                                    orderFoods=orderfood)
 
 @app.route('/user', methods=['GET', 'POST'])
 def get_customer_by_id():
