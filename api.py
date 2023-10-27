@@ -177,6 +177,7 @@ def cart_submit():
                 'orderId': existing_order['order'][-1]['orderId'] + 1,
                 'orderFood': cart_data,
                 'status': 'pending',
+                "total": 0,
                 "raating": "",
                 "deliveryAddress": address
             })
@@ -188,6 +189,7 @@ def cart_submit():
                     'orderId': 1,
                     'orderFood': cart_data,
                     'status': 'pending',
+                    "total": 0,
                     "raating": "",
                     "deliveryAddress": address
                 }]
