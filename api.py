@@ -230,7 +230,7 @@ def checkout():
         if customer["id"] == session['id']:
             user_address = customer.get("address")
             break
-    return render_template('checkout.html', page="checkout", user_address=user_address, cart=cartFood, total_price=total_price)
+    return render_template('checkout.html', page="checkout", name=session["name"], user_address=user_address, cart=cartFood, total_price=total_price)
 
 
 @app.route('/orderStatus')
@@ -275,11 +275,11 @@ def get_customer_by_id():
         if customer["id"] == session['id']:
             if session['tab'] != "deliveryPersonnel":
                 return render_template('user.html', tab=session['tab'], userName=customer["name"],
-                                       id=customer["id"], userEmail=customer["email"], userPhone=customer["phone"],
+                                       id=customer["id"], userEmail=customer["email"], name=session["name"], userPhone=customer["phone"],
                                        userAddress=customer.get("address"))
             else:
                 return render_template('user.html', tab=session['tab'], userName=customer["name"],
-                                       id=customer["id"], userEmail=customer["email"], userPhone=customer["phone"])
+                                       id=customer["id"], userEmail=customer["email"], name=session["name"], userPhone=customer["phone"])
     return jsonify({"error": "Customer not found"})
 
 
@@ -414,6 +414,10 @@ def history():
                 orderfood.append(order_details)
     return render_template('orderhistory.html', name=username, id=userID, tab=tab, orders=order, foods=food,
                                     orderFoods=orderfood, page="history")
+
+@app.route('/deliveryPersonnel')
+def deliveryPersonnel():
+    return render_template('deliveryPersonnel.html', page="deliveryPersonnel", tab=session['tab'], id=session["id"], name=session["name"])
 
 if __name__ == '__main__':
     app.run(debug=True)

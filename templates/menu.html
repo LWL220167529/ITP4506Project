@@ -49,10 +49,12 @@
               <li><a href="http://127.0.0.1:5000/history" class="nav-link px-2 {%if page== 'history'%}text-secondary{%else%}text-white{%endif%}">History</a></li>
             {% elif tab == "restaurant" %}
               <li><a href="http://127.0.0.1:5000/restaurantManagement" class="nav-link px-2 {%if page== 'restaurantManagement'%}text-secondary{%else%}text-white{%endif%}">Management</a></li>
+            {% elif tab == "deliveryPersonnel" %}
+              <li><a href="http://127.0.0.1:5000/deliveryPersonnel" class="nav-link px-2 {%if page== 'restaurantManagement'%}text-secondary{%else%}text-white{%endif%}">Delivery</a></li>
             {% endif %}
               <li><a href="http://127.0.0.1:5000/cart" class="nav-link px-2 {%if page== 'cart'%}text-secondary{%else%}text-white{%endif%}">Cart</a></li>
             </ul>
-            {% if id %}
+            {% if name %}
               <center><a href="http://127.0.0.1:5000/user" class="nav-link px-2 text-white"><i class="fas fa-user"></i>Welcome {{name}}</a></center>
             {% endif %}
             {% if page == "home" %}
