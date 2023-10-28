@@ -59,9 +59,14 @@
             <h5>Estimated delivery time</h5>
             <h3>20 - 30 min</h3>
             <!-- Bootstrap progress bar -->
-            <div class="progress" style="height: 10px;">
-                <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
+            <div class="position-relative m-4">
+                <div class="progress" role="progressbar" aria-label="Progress" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="height: 1px;">
+                  <div class="progress-bar" style="width: 50%"></div>
+                </div>
+                <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem;">1</button>
+                <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem;">2</button>
+                <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem;">3</button>
+              </div>
             <p>Preparing your food. Your rider will pick it up once it's ready.</p>
         </div>
 
@@ -70,43 +75,28 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Order details</h5>
-                    {%for food in orders.food%}{%for foodName in foods%}{%if food.foodId == foodName.id%}
-                    <p class="card-text">{{foodName.name}} X {{food.quantity}}</p>
-                    {%endif%}{%endfor%}{%endfor%}
-                    <p class="card-text">Order number: {{orders.orderId}}</p>
-                    <p class="card-text">Delivery Address: {{orders.deliveryAddress}}</p>
+                    {% for food in orders.food %}{% for foodName in foods %}{% if food.foodId == foodName.id %}
+                    <p class="card-text">{{ foodName.name }} X {{ food.quantity }}</p>
+                    {% endif %}{% endfor %}{% endfor %}
+                    <p class="card-text">Order number: {{ orders.orderId }}</p>
+                    <p class="card-text">Delivery Address: {{ orders.deliveryAddress }}</p>
                     <p class="card-text">Hong Kong</p>
-                    <p class="text-muted">HK$ {{orders.total}}</p>
+                    <p class="text-muted">HK$ {{ orders.total }}</p>
+                    
+                    <!-- Checkbox and label for confirming receipt -->
+                    <div class="d-flex justify-content-end align-items-center mt-3">
+                        <input class="form-check-input" type="checkbox" value="" id="confirmedReceipt">
+                        <label class="form-check-label ms-2" for="confirmedReceipt">
+                            I have received the order.
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        
 </div>
 {%endif%}
 {%endfor%}
-
-<script>
-    const progressBar = document.getElementById('progress-bar');
-
-    const totalTime = 30 * 60; // in seconds
-    const updateTime = 30; // in seconds
-    let currentTime = 0;
-
-    function updateProgress() {
-        currentTime += updateTime;
-        const percentage = (currentTime / totalTime) * 100;
-        progressBar.style.width = `${percentage}%`;
-        progressBar.setAttribute('aria-valuenow', percentage);
-
-        // Stop updating if 100% is reached
-        if (percentage < 100) {
-            setTimeout(updateProgress, updateTime * 1000);
-        }
-    }
-    updateProgress();
-
-</script>
-
        
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
