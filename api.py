@@ -241,7 +241,7 @@ def checkout():
         if customer["id"] == session['id']:
             user_address = customer.get("address")
             break
-    return render_template('checkout.html', page="checkout", name=session["name"], user_address=user_address, cart=cartFood, total_price=total_price)
+    return render_template('checkout.html', page="checkout", name=session["name"], user_address=user_address, cart=cartFood, total_price=total_price, id=userID, tab=tab)
 
 
 @app.route('/orderStatus')
