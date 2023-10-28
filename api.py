@@ -400,7 +400,8 @@ def history():
                     "orderId": order["orderId"],
                     "food": [],
                     "status": order["status"],
-                    "total": 0
+                    "total": 0,
+                    "orderDate": order["orderDate"]
                 }
                 for order_food in order["orderFood"]:
                     food_id, quantity = list(order_food.items())[0]
