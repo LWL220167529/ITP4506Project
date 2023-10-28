@@ -131,8 +131,6 @@ def cart():
                 for foodId, quantity in foodCart.items()
                 for food in foods
                 if int(food['id']) == int(foodId)]
-    if request.args.get("error") is not None:
-        return render_template('cart.html', page="cart", name=username, id=userID, tab=tab, error=request.args.get("error"))
     return render_template('cart.html', page="cart", cart=cartFood, name=username, id=userID, tab=tab)
 
 @app.route('/editCart', methods=['GET','POST'])
@@ -219,15 +217,13 @@ def cart_submit():
     
 @app.route('/checkout')
 def checkout():
-    if not all(key in session for key in ['id', 'name', 'tab']) and session['tab'] != "customer":
+    if not all(key in session for key in ['id', 'name', 'tab']):
         return redirect(url_for('login'))
     userID, username, tab = session['id'], session['name'], session['tab']
     with open('cart.json', 'r') as f:
         cart = json.load(f)
     with open('food.json', 'r') as f:
         foods = json.load(f)
-    if cart is None or len(cart) == 0:
-        return redirect(url_for('cart') + "?error=Please add food to cart")
     cartFood = [{"id": food['id'], "name": food['name'], "quantity": int(quantity), "price": float(food['price'])}
                 for foodCart in cart
                 for foodId, quantity in foodCart.items()
