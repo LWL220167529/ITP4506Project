@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, session
 from flask_cors import CORS
-from datetime import datetime
 import json
 
 app = Flask(__name__, template_folder='templates', static_folder='image')
@@ -96,7 +95,6 @@ def search_food(keyword):
 
 @app.route('/savefood', methods=['GET', 'POST'])
 def savefood():
-    try:
         data = json.loads(request.data)
         id = str(data['id'])  # convert id to integer
         quantity = data['quantity']
@@ -113,8 +111,6 @@ def savefood():
             # write the list to the file in JSON format
             json.dump(itemInCart, f)
         return jsonify({'message': 'success'})
-    except:
-        return jsonify({'error': 'Please login first'})
 
 
 @app.route('/cart')
@@ -163,10 +159,6 @@ def clearCart():
 def cart_submit():
     try:
         address = request.args.get("address")
-        
-        # Get the current date
-        current_date = datetime.now().strftime('%Y-%m-%d')
-
         # Load cart and order data
         with open('cart.json', 'r') as cart_file, open('order.json', 'r') as order_file:
             cart_data = json.load(cart_file)
@@ -184,8 +176,7 @@ def cart_submit():
                 'status': 'pending',
                 "total": 0,
                 "raating": "",
-                "deliveryAddress": address,
-                "orderDate": current_date
+                "deliveryAddress": address
             })
         # If there is no existing order, create a new one
         else:
@@ -197,8 +188,7 @@ def cart_submit():
                     'status': 'pending',
                     "total": 0,
                     "raating": "",
-                    "deliveryAddress": address,
-                    "orderDate": current_date
+                    "deliveryAddress": address
                 }]
             })
 
@@ -407,8 +397,7 @@ def history():
                     "orderId": order["orderId"],
                     "food": [],
                     "status": order["status"],
-                    "total": 0,
-                    "orderDate": order["orderDate"],
+                    "total": 0
                 }
                 for order_food in order["orderFood"]:
                     food_id, quantity = list(order_food.items())[0]
