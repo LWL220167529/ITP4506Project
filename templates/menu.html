@@ -61,10 +61,13 @@
               <center><a href="http://127.0.0.1:5000/user" class="nav-link px-2 text-white"><i class="fas fa-user"></i>Welcome {{name}}</a></center>
             {% endif %}
             {% if page == "home" %}
-              <form onsubmit="window.location.href = 'http://127.0.0.1:5000/search/'+document.getElementById('Search').value+'/1'; return false;">
-                <input id="Search" type="search" class="col-12 col-lg-auto mb-3 mb-lg-0 ms-2 text-bg-dark" placeholder="Search..." aria-label="Search" value="{{search}}" required>
-                <button type="submit" class="btn btn-primary me-lg-3">Search</button>
-              </form>
+            <form onsubmit="window.location.href = 'http://127.0.0.1:5000/search/'+document.getElementById('Search').value+'/1'; return false;">
+              <div class="d-flex flex-row-reverse">
+              <button type="submit" class="p-2 btn btn-primary me-lg-3">Search</button>
+              <input id="Search" type="search" class="p-2 col-12 mb-3 mb-lg-0 form-control text-bg-dark" placeholder="Search..." aria-label="Search" value="{{search}}" required>
+
+              </div>
+            </form>
             {%endif%}
             <div class="text-end ms-2">
             {% if id %}

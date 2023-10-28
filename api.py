@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, session
 from flask_cors import CORS
-from datetime import datetime
 import json
 
 app = Flask(__name__, template_folder='templates', static_folder='image')
@@ -96,7 +95,6 @@ def search_food(keyword):
 
 @app.route('/savefood', methods=['GET', 'POST'])
 def savefood():
-    try:
         data = json.loads(request.data)
         id = str(data['id'])  # convert id to integer
         quantity = data['quantity']
@@ -113,8 +111,6 @@ def savefood():
             # write the list to the file in JSON format
             json.dump(itemInCart, f)
         return jsonify({'message': 'success'})
-    except:
-        return jsonify({'error': 'Please login first'})
 
 
 @app.route('/cart')
@@ -131,8 +127,6 @@ def cart():
                 for foodId, quantity in foodCart.items()
                 for food in foods
                 if int(food['id']) == int(foodId)]
-    if request.args.get("error") is not None:
-        return render_template('cart.html', page="cart", name=username, id=userID, tab=tab, error=request.args.get("error"))
     return render_template('cart.html', page="cart", cart=cartFood, name=username, id=userID, tab=tab)
 
 @app.route('/editCart', methods=['GET','POST'])
@@ -165,10 +159,6 @@ def clearCart():
 def cart_submit():
     try:
         address = request.args.get("address")
-        
-        # Get the current date
-        current_date = datetime.now().strftime('%Y-%m-%d')
-
         # Load cart and order data
         with open('cart.json', 'r') as cart_file, open('order.json', 'r') as order_file:
             cart_data = json.load(cart_file)
@@ -186,8 +176,7 @@ def cart_submit():
                 'status': 'pending',
                 "total": 0,
                 "raating": "",
-                "deliveryAddress": address,
-                "orderDate": current_date
+                "deliveryAddress": address
             })
         # If there is no existing order, create a new one
         else:
@@ -199,8 +188,7 @@ def cart_submit():
                     'status': 'pending',
                     "total": 0,
                     "raating": "",
-                    "deliveryAddress": address,
-                    "orderDate": current_date
+                    "deliveryAddress": address
                 }]
             })
 
@@ -219,15 +207,13 @@ def cart_submit():
     
 @app.route('/checkout')
 def checkout():
-    if not all(key in session for key in ['id', 'name', 'tab']) and session['tab'] != "customer":
+    if not all(key in session for key in ['id', 'name', 'tab']):
         return redirect(url_for('login'))
     userID, username, tab = session['id'], session['name'], session['tab']
     with open('cart.json', 'r') as f:
         cart = json.load(f)
     with open('food.json', 'r') as f:
         foods = json.load(f)
-    if cart is None or len(cart) == 0:
-        return redirect(url_for('cart') + "?error=Please add food to cart")
     cartFood = [{"id": food['id'], "name": food['name'], "quantity": int(quantity), "price": float(food['price'])}
                 for foodCart in cart
                 for foodId, quantity in foodCart.items()
@@ -411,8 +397,7 @@ def history():
                     "orderId": order["orderId"],
                     "food": [],
                     "status": order["status"],
-                    "total": 0,
-                    "orderDate": order["orderDate"],
+                    "total": 0
                 }
                 for order_food in order["orderFood"]:
                     food_id, quantity = list(order_food.items())[0]
