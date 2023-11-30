@@ -6,7 +6,7 @@
 <script>
     function onPlaceOrderClick() {
         var address = document.getElementById("address").value;
-        window.location.href = "http://127.0.0.1:5000/cartSubmit?address=" + address;
+        window.location.href = "http://127.0.0.1:5000/cartSubmit?address=" + address + "&totalPrice={{total_price + 35}}";
     }
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -185,7 +185,7 @@ document.getElementById("cardHolderName").oninput = function() {
                     </div>
                     <hr>
                     <div>
-                        <h6>Total <strong class="float-end">HK$ {{total_price}}</strong></h6>
+                        <h6>Total <strong class="float-end">HK$ {{total_price + 35}}</strong></h6>
                     </div>
                 </div>
             </div>

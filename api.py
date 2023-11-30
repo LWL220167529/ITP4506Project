@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, render_template, redirect, url_for, s
 from flask_cors import CORS
 from datetime import datetime
 import json
+import random
 
 app = Flask(__name__, template_folder='templates', static_folder='image')
 app.secret_key = 'id'
@@ -166,6 +167,8 @@ def cart_submit():
     try:
         address = request.args.get("address")
         
+        totalPrice = request.args.get("totalPrice")
+
         # Get the current date
         current_date = datetime.now().strftime('%Y-%m-%d')
 
@@ -173,6 +176,12 @@ def cart_submit():
         with open('cart.json', 'r') as cart_file, open('order.json', 'r') as order_file:
             cart_data = json.load(cart_file)
             order_data = json.load(order_file)
+        with open('user.json', 'r') as f:
+            user = json.load(f)
+        restaurant = user['deliveryPersonnel']
+        random_index = random.randint(0, len(restaurant) - 1)
+
+    
 
         # Check if there is an existing order for the customer
         customer_id = session['id']
@@ -184,10 +193,11 @@ def cart_submit():
                 'orderId': existing_order['order'][-1]['orderId'] + 1,
                 'orderFood': cart_data,
                 'status': 'pending',
-                "total": 0,
+                "total": int(totalPrice),
                 "raating": "",
                 "deliveryAddress": address,
-                "orderDate": current_date
+                "orderDate": current_date,
+                "deliveryPersonnel": restaurant[random_index].get('id')
             })
         # If there is no existing order, create a new one
         else:
@@ -197,10 +207,11 @@ def cart_submit():
                     'orderId': 1,
                     'orderFood': cart_data,
                     'status': 'pending',
-                    "total": 0,
+                    "total": int(totalPrice),
                     "raating": "",
                     "deliveryAddress": address,
-                    "orderDate": current_date
+                    "orderDate": current_date,
+                    "deliveryPersonnel": restaurant[random_index].get('id')
                 }]
             })
 
@@ -389,10 +400,34 @@ def restaurantManagement():
                     })
 
                 result.append(customer_detail)
-            print(result)
             return render_template('restaurantManagement.html', customers=user["customer"], foods=food,
                                    orderFoods=result, name=username, id=userID, tab=tab, page="restaurantManagement")
     return redirect(url_for('login'))
+
+@app.route('/confirmOrder', methods=['GET', 'POST'])
+def confirmOrder():
+    if 'tab' in session:
+        userID = session['id']
+    with open('order.json', 'r') as f:
+        order = json.load(f)
+
+    order_id = request.args.get("orderId")
+
+    # Find the order with the given order_id
+    for customer_order in order:
+        if customer_order["customer"] == request.args.get("userId"):
+            for order_entry in customer_order["order"]:
+                if order_entry["orderId"] == int(order_id):
+                    # Update the status of the order to "confirmed"
+                    order_entry["status"] = "confirmed"
+                    break
+    
+    # Save the updated order back to the file
+    with open('order.json', 'w') as f:
+        json.dump(order, f)
+    
+    # Return a response indicating the order has been confirmed
+    return redirect(url_for('restaurantManagement'))
 
 @app.route('/history')
 def history():
@@ -430,6 +465,34 @@ def history():
 @app.route('/deliveryPersonnel')
 def deliveryPersonnel():
     return render_template('deliveryPersonnel.html', page="deliveryPersonnel", tab=session['tab'], id=session["id"], name=session["name"])
+
+@app.route('/modifyMenuItems', methods=['GET', 'POST'])
+def modifyMenuItems():
+    message = request.args.get("message")
+    with open('food.json', 'r') as f:
+        food = json.load(f)
+    return render_template('modifyMenuItems.html', page="modifyOrder", tab=session['tab'], id=session["id"], name=session["name"], foods=food, message=message)
+
+@app.route('/modifyFoodItem', methods=['GET', 'POST'])
+def modifyFoodItems():
+    with open('food.json', 'r') as f:
+        foods = json.load(f)
+    if request.method == 'POST':
+        for food in foods:
+            if food['id'] == int(request.form['foodId']):
+                food['name'] = request.form['foodName']
+                food['category'] = request.form['foodCategory']
+                food['price'] = request.form['foodPrice']
+                food['description'] = request.form['foodDescription']
+                break
+        with open('food.json', 'w') as f:
+            json.dump(foods, f)
+        return redirect(url_for('modifyMenuItems')+"?message=Food item updated successfully")
+    else:
+        for oneFood in foods:
+            if oneFood['id'] == int(request.args.get("foodId")):
+                return render_template('modifyFoodItem.html', page="modifyOrder", tab=session['tab'], id=session["id"], name=session["name"], food=oneFood)
+    return redirect(url_for('modifyMenuItems'))
 
 if __name__ == '__main__':
     app.run(debug=True)

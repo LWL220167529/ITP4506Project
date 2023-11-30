@@ -24,7 +24,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
       .navbar-brand i, .nav-link i {margin-right: 5px;}
-    </style>
+      .welcome-message, form {
+          display: flex;
+          align-items: center;
+          margin: 0;
+      }
+      #Search {
+          width: 150px;
+      }
+  </style>
     <script>
       function redirectToLogin() {
         window.location.href = "login";
@@ -42,33 +50,34 @@
         }
       }
     </script>
-    <header class="p-3 text-bg-dark">
-        <div class="container">
-          <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a class="navbar-brand"><i class="fas fa-hamburger"></i> Yummy Restaurant</a>
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+<header class="p-3 text-bg-dark">
+  <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+          <a class="navbar-brand"><i class="fas fa-hamburger"></i> Yummy Restaurant</a>
+          <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
               <li><a href="http://127.0.0.1:5000/" class="nav-link px-2 {%if page== 'home'%}text-secondary{%else%}text-white{%endif%}"><i class="fas fa-home"></i>Home</a></li>
-            {% if tab == "customer"%}
+              {% if tab == "customer"%}
               <li><a href="http://127.0.0.1:5000/history" class="nav-link px-2 {%if page== 'history'%}text-secondary{%else%}text-white{%endif%}"><i class="fa-regular fa-note-sticky" ></i>Order History</a></li>
             {% elif tab == "restaurant" %}
               <li><a href="http://127.0.0.1:5000/restaurantManagement" class="nav-link px-2 {%if page== 'restaurantManagement'%}text-secondary{%else%}text-white{%endif%}">Management</a></li>
             {% elif tab == "deliveryPersonnel" %}
               <li><a href="http://127.0.0.1:5000/deliveryPersonnel" class="nav-link px-2 {%if page== 'restaurantManagement'%}text-secondary{%else%}text-white{%endif%}">Delivery</a></li>
             {% endif %}
-              <li><a href="http://127.0.0.1:5000/cart" class="nav-link px-2 {%if page== 'cart'%}text-secondary{%else%}text-white{%endif%}"><i class="fa-solid fa-cart-shopping"></i>Cart</a></li>
-            </ul>
-            {% if name %}
-              <center><a href="http://127.0.0.1:5000/user" class="nav-link px-2 text-white"><i class="fas fa-user"></i>Welcome {{name}}</a></center>
-            {% endif %}
-            {% if page == "home" %}
-            <form onsubmit="window.location.href = 'http://127.0.0.1:5000/search/'+document.getElementById('Search').value+'/1'; return false;">
-              <div class="d-flex flex-row-reverse">
-              <button type="submit" class="p-2 btn btn-primary me-lg-3">Search</button>
-              <input id="Search" type="search" class="p-2 col-12 mb-3 mb-lg-0 form-control text-bg-dark" placeholder="Search..." aria-label="Search" value="{{search}}" required>
+              <li><a href="http://127.0.0.1:5000/cart" class="nav-link px-2 {%if page== 'cart'%}text-secondary{%else%}text-white{%endif%}"><i class="fa-solid fa-cart-shopping"></i>Cart</a></li><!-- ... [Other list items] ... -->
+          </ul>
 
-              </div>
-            </form>
-            {%endif%}
+          {% if name %}
+          <div class="welcome-message">
+              <a href="http://127.0.0.1:5000/user" class="nav-link px-2 text-white"><i class="fas fa-user"></i>Welcome {{name}}</a>
+          </div>
+          {% endif %}
+
+          {% if page == "home" %}
+          <form onsubmit="window.location.href = 'http://127.0.0.1:5000/search/'+document.getElementById('Search').value+'/1'; return false;">
+              <input id="Search" type="search" class="p-2 form-control text-bg-dark" placeholder="Search..." aria-label="Search" value="{{search}}" required>
+              <button type="submit" class="p-2 btn btn-primary me-lg-3">Search</button>
+          </form>
+          {%endif%}
             <div class="text-end ms-2">
             {% if id %}
               <button type="button" class="btn btn-outline-light me-2" onclick="redirectToLogout()">Logout</button>

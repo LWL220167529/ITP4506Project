@@ -1,1 +1,93 @@
-{"customer": [{"address": "root", "email": "root@root.com", "id": "root", "name": "root", "password": "root", "phone": "12345678"}, {"address": "user1", "email": "user1@root.com", "id": "user1", "name": "user1", "password": "1", "phone": "12345687"}, {"id": "1", "name": "1", "email": "123@qwe.com", "phone": "12446546", "address": "1", "password": "12"}, {"id": "123", "name": "123", "email": "132@asd.com", "phone": "12345679", "address": "123", "password": "123"}, {"id": "321", "name": "312", "email": "312@321.com", "phone": "321", "password": "1", "address": "321"}], "restaurant": [{"address": "restaurant1", "email": "restaurant1@root.com", "id": "restaurant1", "name": "restaurant1", "password": "1", "phone": "12345786"}, {"address": "restaurant2", "email": "restaurant2@root.com", "id": "restaurant2", "name": "restaurant2", "password": "2", "phone": "12347865"}, {"id": "restaurant3", "name": "restaurant3", "email": "restaurant2@root.com", "phone": "21347865", "password": "3", "address": "restaurant3"}], "deliveryPersonnel": [{"email": "deliveryPersonnel1@root.com", "id": "deliveryPersonnel1", "name": "deliveryPersonnel1", "password": "1", "phone": "99999999"}, {"email": "deliveryPersonnel2@root.com", "id": "deliveryPersonnel2", "name": "deliveryPersonnel2", "password": "2", "phone": "12784653"}]}
+{
+  "customer": [
+    {
+      "address": "root",
+      "email": "root@root.com",
+      "id": "root",
+      "name": "root",
+      "password": "root",
+      "phone": "12345678"
+    },
+    {
+      "address": "user1",
+      "email": "user1@root.com",
+      "id": "user1",
+      "name": "user1",
+      "password": "1",
+      "phone": "12345687"
+    },
+    {
+      "id": "1",
+      "name": "1",
+      "email": "123@qwe.com",
+      "phone": "12446546",
+      "address": "1",
+      "password": "12"
+    },
+    {
+      "id": "123",
+      "name": "123",
+      "email": "132@asd.com",
+      "phone": "12345679",
+      "address": "123",
+      "password": "123"
+    },
+    {
+      "id": "321",
+      "name": "312",
+      "email": "312@321.com",
+      "phone": "321",
+      "password": "1",
+      "address": "321"
+    }
+  ],
+  "restaurant": [
+    {
+      "address": "restaurant1",
+      "email": "restaurant1@root.com",
+      "id": "restaurant1",
+      "name": "restaurant1",
+      "password": "1",
+      "phone": "12345786"
+    },
+    {
+      "address": "restaurant2",
+      "email": "restaurant2@root.com",
+      "id": "restaurant2",
+      "name": "restaurant2",
+      "password": "2",
+      "phone": "12347865"
+    },
+    {
+      "id": "restaurant3",
+      "name": "restaurant3",
+      "email": "restaurant2@root.com",
+      "phone": "21347865",
+      "password": "3",
+      "address": "restaurant3"
+    }
+  ],
+  "deliveryPersonnel": [
+    {
+      "email": "deliveryPersonnel1@root.com",
+      "id": "deliveryPersonnel1",
+      "name": "deliveryPersonnel1",
+      "password": "1",
+      "phone": "99999999"
+    },
+    {
+      "email": "deliveryPersonnel2@root.com",
+      "id": "deliveryPersonnel2",
+      "name": "deliveryPersonnel2",
+      "password": "2",
+      "phone": "12784653"
+    },
+    {
+      "email": "deliveryPersonnel3@root.com",
+      "id": "deliveryPersonnel3",
+      "name": "deliveryPersonnel3",
+      "password": "3",
+      "phone": "12124653"
+    }
+  ]
+}

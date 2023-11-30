@@ -26,6 +26,13 @@
   }
 </style>
 
+<script>
+  function confirmOrder(orderId, userId) {
+    window.location.href = "http://127.0.0.1:5000/confirmOrder?orderId="+orderId+"&userId="+userId;
+    alert("Order confirmed!");
+  }
+</script>
+
 <div class="container dashboard-container">
   <!-- Tabs Navigation -->
   <ul class="nav nav-tabs mb-3" id="dashboardTabs" role="tablist">
@@ -98,7 +105,8 @@
         </thead>
         <tbody>
           <!-- Sample menu items -->
-          {%if foods%} {% for item in foods %}
+          {%if foods%} {% for item in foods %} {%if item.restaurant == id %}
+          
           <tr>
             <td>
               <img
@@ -117,7 +125,7 @@
               <button class="btn btn-sm btn-danger">Delete</button>
             </td>
           </tr>
-          {%endfor%} {% endif %}
+          {%endif%}{%endfor%} {% endif %}
           <!-- Add more menu items as needed -->
         </tbody>
       </table>
@@ -144,24 +152,26 @@
           <tbody>
             <!-- Sample order details -->
             {% for order in orderFoods %}
-            {%for customerOrder in order.food%}
+            {%for customerOrder in order.food%} 
             <tr>
               <td>{{customerOrder.orderId}}</td>
               <td>{%for user in customers%}{%if user.id == order.customer%}{{user.name}}{%endif%}{%endfor%}
               </td>
               <td>
                 {%for food in customerOrder.orderFood%}
-                {%for item in foods%}
+                {%for item in foods%}{%if item.restaurant == id%}
                 {%if item.id == food.foodId%}
                 <p>{{item.name}} x {{food.quantity}}</p>
-                {%endif%}
+                {%endif%}{%endif%}  
                 {%endfor%}
                 {%endfor%}
               </td>
               <td>${{customerOrder.total}}</td>
               <td><span class="badge bg-warning text-dark">{{customerOrder.status}}</span></td>
               <td>
-                <button class="btn btn-sm btn-success">Confirm</button>
+                {%if customerOrder.status == 'pending'%}
+                <button class="btn btn-sm btn-success" onclick="confirmOrder({{customerOrder.orderId}}, {%for user in customers%}{%if user.id == order.customer%}'{{user.id}}'{%endif%}{%endfor%})">Confirm</button>
+                {%endif%}
                 <button class="btn btn-sm btn-danger">Cancel</button>
               </td>
             </tr>
