@@ -6,21 +6,21 @@
         "orderId": 1,
         "orderDate": "2023-10-20",
         "orderFood": [{ "45": 9 }, { "43": 3 }],
-        "status": "confirmed",
+        "status": "delivery",
         "total": 0,
         "raating": "",
         "deliveryAddress": "",
-        "deliveryPersonnel": "deliveryPersonnel2"
+        "deliveryPersonID": null
       },
       {
         "orderId": 2,
         "orderDate": "2023-10-20",
         "orderFood": [{ "40": 9 }, { "39": 4 }],
-        "status": "pending",
+        "status": "delivery",
         "total": 0,
         "raating": "",
         "deliveryAddress": "",
-        "deliveryPersonnel": "deliveryPersonnel2"
+        "deliveryPersonID": null
       }
     ]
   },
@@ -31,11 +31,11 @@
         "orderId": 3,
         "orderDate": "2023-10-20",
         "orderFood": [{ "37": 9 }, { "34": 3 }],
-        "status": "completed",
+        "status": "pending",
         "total": 0,
         "raating": "",
-        "deliveryAddress": "",
-        "deliveryPersonnel": "deliveryPersonnel3"
+        "deliveryAddress": "1231424",
+        "deliveryPersonID": null
       },
       {
         "orderId": 4,
@@ -50,7 +50,7 @@
         "raating": "",
         "deliveryAddress": "123",
         "orderDate": "2023-11-28",
-        "deliveryPersonnel": "deliveryPersonnel3"
+        "deliveryPersonID": null
       }
     ]
   }

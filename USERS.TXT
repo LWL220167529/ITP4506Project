@@ -1,0 +1,18 @@
+Customer - UserID : root
+           Password :root
+          UserID : user1 
+          Password :1
+          UserID : 123 
+          Password : 123
+          UserID : 321
+         Password : 1
+RestaurantAdmin - UserID : restaurant1
+                  Password : 1
+                  UserID : restaurant2
+                  Password : 2
+DeliveryPersonnel - UserID : deliveryPersonnel1
+                    Password : 1
+                    UserID : deliveryPersonnel2
+                    Password : 2
+
+             

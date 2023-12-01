@@ -1,9 +1,12 @@
 {% extends "menu.html" %} {% block title %}Restaurant Management{% endblock %}
 {%block content %}
 <link
-  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
   rel="stylesheet"
+  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+  crossorigin="anonymous"
 />
+
 <style>
   body {
     font-family: "Arial", sans-serif;
@@ -23,14 +26,357 @@
     padding-bottom: 10px;
     margin-bottom: 20px;
     margin-top: 20px;
-  }
-</style>
+  }.sort-icon {
+  cursor: pointer;
+  color: #007bff;
+  display: block; /* Makes each icon appear on a new line /
+  text-align: center; / Centers the icons /
+}
 
+th {
+  white-space: nowrap; / Prevents the header from wrapping onto multiple lines /
+  text-align: left; / Aligns the text to the left */
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
-  function confirmOrder(orderId, userId) {
-    window.location.href = "http://127.0.0.1:5000/confirmOrder?orderId="+orderId+"&userId="+userId;
-    alert("Order confirmed!");
+  function deliveryOrder(orderId, userId, customerID) {
+    window.location.href =
+      "http://127.0.0.1:5000/deliveryOrder?orderId=" +
+      orderId +
+      "&userId=" +
+      userId;
   }
+  function confirmOrder(orderId, userId) {
+    window.location.href =
+      "http://127.0.0.1:5000/confirmOrder?orderId=" +
+      orderId +
+      "&userId=" +
+      userId;
+    alert("Order confirm!");
+  }
+  function sortAscendingTableName() {
+    var table, rows, switching, i, x, y, first, second, shouldSwitch;
+    table = document.getElementById("foodTable");
+    switching = true;
+    /* Make a loop that will continue until
+    no switching has been done: */
+    while (switching) {
+      // Start by saying: no switching is done:
+      switching = false;
+      rows = table.rows;
+      /* Loop through all table rows (except the
+      first, which contains table headers): */
+      for (i = 1; i < (rows.length - 1); i++) {
+        // Start by saying there should be no switching:
+        shouldSwitch = false;
+        /* Get the two elements you want to compare,
+        one from current row and one from the next: */
+        first = rows[i].getElementsByTagName("TD")[2];
+        x = first.querySelector("label").innerText;
+        second = rows[i + 1].getElementsByTagName("TD")[2];
+        y = second.querySelector("label").innerText;
+        // Check if the two rows should switch place:
+        if (x.toLowerCase() > y.toLowerCase()) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch = true;
+          break;
+        }
+      }
+      if (shouldSwitch) {
+        /* If a switch has been marked, make the switch
+        and mark that a switch has been done: */
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+      }
+    }
+  }  
+  function sortDescendingTableName() {
+    var table, rows, switching, i, x, y, first, second, shouldSwitch;
+    table = document.getElementById("foodTable");
+    switching = true;
+    /* Make a loop that will continue until
+    no switching has been done: */
+    while (switching) {
+      // Start by saying: no switching is done:
+      switching = false;
+      rows = table.rows;
+      /* Loop through all table rows (except the
+      first, which contains table headers): */
+      for (i = 1; i < (rows.length - 1); i++) {
+        // Start by saying there should be no switching:
+        shouldSwitch = false;
+        /* Get the two elements you want to compare,
+        one from current row and one from the next: */
+        first = rows[i].getElementsByTagName("TD")[2];
+        x = first.querySelector("label").innerText;
+        second = rows[i + 1].getElementsByTagName("TD")[2];
+        y = second.querySelector("label").innerText;
+        // Check if the two rows should switch place:
+        if (x.toLowerCase() < y.toLowerCase()) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch = true;
+          break;
+        }
+      }
+      if (shouldSwitch) {
+        /* If a switch has been marked, make the switch
+        and mark that a switch has been done: */
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+      }
+    }
+  }
+  function sortAscendingTableCategory() {
+    var table, rows, switching, i, x, y, shouldSwitch;
+    table = document.getElementById("foodTable");
+    switching = true;
+    /* Make a loop that will continue until
+    no switching has been done: */
+    while (switching) {
+      // Start by saying: no switching is done:
+      switching = false;
+      rows = table.rows;
+      /* Loop through all table rows (except the
+      first, which contains table headers): */
+      for (i = 1; i < (rows.length - 1); i++) {
+        // Start by saying there should be no switching:
+        shouldSwitch = false;
+        /* Get the two elements you want to compare,
+        one from current row and one from the next: */
+        first = rows[i].getElementsByTagName("TD")[3];
+        x = first.querySelector("label").innerText;
+        second = rows[i + 1].getElementsByTagName("TD")[3];
+        y = second.querySelector("label").innerText;
+        // Check if the two rows should switch place:
+        if (x.toLowerCase() > y.toLowerCase()) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch = true;
+          break;
+        }
+      }
+      if (shouldSwitch) {
+        /* If a switch has been marked, make the switch
+        and mark that a switch has been done: */
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+      }
+    }
+  }
+  function sortDescendingTableCategory() {
+    var table, rows, switching, i, x, y, shouldSwitch;
+    table = document.getElementById("foodTable");
+    switching = true;
+    /* Make a loop that will continue until
+    no switching has been done: */
+    while (switching) {
+      // Start by saying: no switching is done:
+      switching = false;
+      rows = table.rows;
+      /* Loop through all table rows (except the
+      first, which contains table headers): */
+      for (i = 1; i < (rows.length - 1); i++) {
+        // Start by saying there should be no switching:
+        shouldSwitch = false;
+        /* Get the two elements you want to compare,
+        one from current row and one from the next: */
+        first = rows[i].getElementsByTagName("TD")[3];
+        x = first.querySelector("label").innerText;
+        second = rows[i + 1].getElementsByTagName("TD")[3];
+        y = second.querySelector("label").innerText;
+        // Check if the two rows should switch place:
+        if (x.toLowerCase() < y.toLowerCase()) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch = true;
+          break;
+        }
+      }
+      if (shouldSwitch) {
+        /* If a switch has been marked, make the switch
+        and mark that a switch has been done: */
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+      }
+    }
+  }
+  function sortAscendingTablePrice() {
+    var table, rows, switching, i, x, y, shouldSwitch;
+    table = document.getElementById("foodTable");
+    switching = true;
+    /* Make a loop that will continue until
+    no switching has been done: */
+    while (switching) {
+      // Start by saying: no switching is done:
+      switching = false;
+      rows = table.rows;
+      /* Loop through all table rows (except the
+      first, which contains table headers): */
+      for (i = 1; i < (rows.length - 1); i++) {
+        // Start by saying there should be no switching:
+        shouldSwitch = false;
+        /* Get the two elements you want to compare,
+        one from current row and one from the next: */
+        first = rows[i].getElementsByTagName("TD")[5];
+        x = parseInt(first.querySelector("label").innerText);
+        second = rows[i + 1].getElementsByTagName("TD")[5];
+        y = parseInt(second.querySelector("label").innerText);
+        // Check if the two rows should switch place:
+        if (x > y) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch = true;
+          break;
+        }
+      }
+      if (shouldSwitch) {
+        /* If a switch has been marked, make the switch
+        and mark that a switch has been done: */
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+      }
+    }
+  }
+  function sortDescendingTablePrice() {
+    var table, rows, switching, i, x, y, shouldSwitch;
+    table = document.getElementById("foodTable");
+    switching = true;
+    /* Make a loop that will continue until
+    no switching has been done: */
+    while (switching) {
+      // Start by saying: no switching is done:
+      switching = false;
+      rows = table.rows;
+      /* Loop through all table rows (except the
+      first, which contains table headers): */
+      for (i = 1; i < (rows.length - 1); i++) {
+        // Start by saying there should be no switching:
+        shouldSwitch = false;
+        /* Get the two elements you want to compare,
+        one from current row and one from the next: */
+        first = rows[i].getElementsByTagName("TD")[5];
+        x = parseInt(first.querySelector("label").innerText);
+        second = rows[i + 1].getElementsByTagName("TD")[5];
+        y = parseInt(second.querySelector("label").innerText);
+        // Check if the two rows should switch place:
+        if (x < y) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch = true;
+          break;
+        }
+      }
+      if (shouldSwitch) {
+        /* If a switch has been marked, make the switch
+        and mark that a switch has been done: */
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+      }
+    }
+  }
+  $(document).ready(function () {
+    console.log("ready!");
+    $(".itemName").dblclick(function () {
+      const input = $(this).siblings();
+      input.attr("hidden", false);
+      input.focusin();
+      $(this).attr("hidden", true);
+    });
+    $(".inputItemName").focusout(function () {
+      const label = $(this).closest("td").find("label");
+      label.text($(this).val());
+      label.attr("hidden", false);
+      $(this).attr("hidden", true);
+    });
+    $(".itemCategory").dblclick(function () {
+      const input = $(this).siblings();
+      input.attr("hidden", false);
+      input.focusin();
+      $(this).attr("hidden", true);
+    });
+    $(".selectItemCategory").focusout(function () {
+      const label = $(this).closest("td").find("label");
+      label.text($(this).val());
+      label.attr("hidden", false);
+      $(this).attr("hidden", true);
+    });
+    $(".itemPrice").dblclick(function () {
+      const input = $(this).siblings();
+      input.attr("hidden", false);
+      input.focusin();
+      $(this).attr("hidden", true);
+    });
+    $(".inputItemPrice").focusout(function () {
+      const label = $(this).closest("td").find("label");
+      label.text($(this).val());
+      label.attr("hidden", false);
+      $(this).attr("hidden", true);
+    });
+    $(".itemDescription").dblclick(function () {
+      const input = $(this).siblings();
+      input.attr("hidden", false);
+      input.focusin();
+      $(this).attr("hidden", true);
+    });
+    $(".textareaItemDescription").focusout(function () {
+      const label = $(this).closest("td").find("label");
+      label.text($(this).val());
+      label.attr("hidden", false);
+      $(this).attr("hidden", true);
+    });
+    $(".edit").click(function () {
+      // BEGIN: ask-user-confirm-edit
+      if (confirm("Are you sure you want to edit the data?")) {
+        $.ajax({
+          url: "http://127.0.0.1:5000/modifyFoodItem",
+          type: "POST",
+          data: {
+            foodId: $(this).closest("tr").find("td:eq(0)").text(),
+            foodName: $(this).closest("tr").find("td:eq(2)").find("label").text(),
+            foodCategory: $(this).closest("tr").find("td:eq(3)").find("label").text(),
+            foodPrice: $(this).closest("tr").find("td:eq(5)").find("label").text(),
+            foodDescription: $(this).closest("tr").find("td:eq(4)").find("label").text(),
+          },
+          success: function (response) {
+            console.log(response);
+            alert(response);
+          },
+          error: function (error) {
+            console.log(error);
+          },
+        });
+      }
+    });
+
+    $(".confirm").click(function () {
+      const button = $(this).closest("td").find("button:gt(0)");
+      button.attr("hidden", false);
+      $(this).attr("hidden", true);
+      alert(
+        "Order ID " +
+          $(this).closest("tr").find("td:eq(0)").text() +
+          " confirm!"
+      );
+    });
+
+    $(".delete").click(function () {
+      const thisRow = $(this).closest("tr");
+      $.ajax({
+        url: "http://127.0.0.1:5000/deleteFoodItem",
+        type: "POST",
+        data: {
+          foodId: $(this).closest("tr").find("td:eq(0)").text(),
+        },
+        success: function (response) {
+          console.log(response);
+          thisRow.remove();
+          const toastBootstrap =
+            bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+          toastBootstrap.show();
+        },
+        error: function (error) {
+          console.log(error);
+        },
+      });
+    });
+  });
 </script>
 
 <div class="container dashboard-container">
@@ -62,19 +408,6 @@
         Process Orders
       </button>
     </li>
-    <li class="nav-item" role="presentation">
-      <button
-        class="nav-link"
-        id="interact-tab"
-        data-bs-toggle="tab"
-        href="#interact"
-        role="tab"
-        aria-controls="interact"
-        aria-selected="false"
-      >
-        Interact with Customers
-      </button>
-    </li>
   </ul>
 
   <!-- Tabs Content -->
@@ -88,26 +421,35 @@
     >
       <!-- Manage Menu Section -->
       <div class="d-flex justify-content-end mb-3">
-        <button class="btn btn-primary mb-3">Add New Dish</button>
+        <a href="http://127.0.0.1:5000/addFoodItem"
+          ><button class="btn btn-primary mb-3">Add New Dish</button></a
+        >
       </div>
       <!-- Table for menu items -->
       <!-- Table for menu items -->
-      <table class="table table-hover">
+      <table id="foodTable" class="table table-hover">
         <thead>
           <tr>
             <th>Image</th>
-            <th>Dish Name</th>
-            <th>Category</th>
+            <th>Dish Name<br />
+              <span class="sort-icon ascending" onclick="sortAscendingTableName()">▲</span>
+              <span class="sort-icon descending" onclick="sortDescendingTableName()">▼</span></th>
+            <th>Category<br />
+              <span class="sort-icon ascending" onclick="sortAscendingTableCategory()">▲</span>
+              <span class="sort-icon descending" onclick="sortDescendingTableCategory()">▼</span></th>
             <th>Description</th>
-            <th>Price</th>
+            <th>Price<br />
+              <span class="sort-icon ascending" onclick="sortAscendingTablePrice()">▲</span>
+              <span class="sort-icon descending" onclick="sortDescendingTablePrice()">▼</span></th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <!-- Sample menu items -->
-          {%if foods%} {% for item in foods %} {%if item.restaurant == id %}
-          
+          {%if foods%} {% for item in foods %}
+
           <tr>
+            <td hidden>{{item.id}}</td>
             <td>
               <img
                 src="{{url_for('static', filename=item.image)}}"
@@ -116,16 +458,49 @@
                 height="50"
               />
             </td>
-            <td>{{item.name}}</td>
-            <td>{{item.category}}</td>
-            <td>{{item.description}}</td>
-            <td>${{item.price}}</td>
             <td>
-              <button class="btn btn-sm btn-warning">Edit</button>
-              <button class="btn btn-sm btn-danger">Delete</button>
+              <label class="itemName">{{item.name}}</label
+              ><input
+                type="text"
+                class="inputItemName"
+                value="{{item.name}}"
+                hidden
+              />
+            </td>
+            <td>
+              <label class="itemCategory">{{item.category}}</label
+              ><select class="selectItemCategory" hidden>
+                <option>Japanese Food</option>
+                <option>Thai Food</option>
+                <option>Fast Food</option>
+                <option>Chinese Food</option>
+              </select>
+            </td>
+            <td>
+              <label class="itemDescription">{{item.description}}</label
+              ><textarea class="textareaItemDescription" cols="100%" hidden>
+{{item.description}}</textarea
+              >
+            </td>
+            <td>
+              $<label class="itemPrice">{{item.price}}</label
+              ><input
+                type="number"
+                class="inputItemPrice"
+                min="0"
+                step="0.01"
+                value="{{item.price}}"
+                hidden
+              />
+            </td>
+            <td>
+              <button class="btn btn-sm btn-warning edit">Edit</button>
+              <button id="delete" class="btn btn-sm btn-danger delete">
+                Delete
+              </button>
             </td>
           </tr>
-          {%endif%}{%endfor%} {% endif %}
+          {%endfor%} {% endif %}
           <!-- Add more menu items as needed -->
         </tbody>
       </table>
@@ -151,32 +526,40 @@
           </thead>
           <tbody>
             <!-- Sample order details -->
-            {% for order in orderFoods %}
-            {%for customerOrder in order.food%} 
+            {% for order in orderFoods %} {%for customerOrder in order.food%}
             <tr>
               <td>{{customerOrder.orderId}}</td>
-              <td>{%for user in customers%}{%if user.id == order.customer%}{{user.name}}{%endif%}{%endfor%}
+              <td>
+                {%for user in customers%}{%if user.id ==
+                order.customer%}{{user.name}}{%endif%}{%endfor%}
               </td>
               <td>
-                {%for food in customerOrder.orderFood%}
-                {%for item in foods%}{%if item.restaurant == id%}
+                {%for food in customerOrder.orderFood%} {%for item in foods%}
                 {%if item.id == food.foodId%}
                 <p>{{item.name}} x {{food.quantity}}</p>
-                {%endif%}{%endif%}  
-                {%endfor%}
-                {%endfor%}
+                {%endif%} {%endfor%} {%endfor%}
               </td>
               <td>${{customerOrder.total}}</td>
-              <td><span class="badge bg-warning text-dark">{{customerOrder.status}}</span></td>
+              <td>
+                <span class="badge bg-warning text-dark"
+                  >{{customerOrder.status}}</span
+                >
+              </td>
               <td>
                 {%if customerOrder.status == 'pending'%}
-                <button class="btn btn-sm btn-success" onclick="confirmOrder({{customerOrder.orderId}}, {%for user in customers%}{%if user.id == order.customer%}'{{user.id}}'{%endif%}{%endfor%})">Confirm</button>
+                <button class="btn btn-sm btn-success confirm">Confirm</button>
+                <button
+                  class="btn btn-sm btn-success setDeliveryPerson"
+                  onclick="deliveryOrder({{customerOrder.orderId}}, {%for user in customers%}{%if user.id == order.customer%}'{{user.id}}'{%endif%}{%endfor%})"
+                  hidden
+                >
+                  Set delivery person
+                </button>
                 {%endif%}
                 <button class="btn btn-sm btn-danger">Cancel</button>
               </td>
             </tr>
-            {%endfor%}
-            {%endfor%}
+            {%endfor%} {%endfor%}
             <!-- Add more orders as needed -->
           </tbody>
         </table>
@@ -205,6 +588,26 @@
       <button class="btn btn-primary">Send Message</button>
     </div>
   </div>
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div
+      id="liveToast"
+      class="toast"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    >
+      <div class="toast-header">
+        <strong class="me-auto">Menu</strong>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="toast"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="toast-body">The food has been deleted to the menu.</div>
+    </div>
+  </div>
 
   <!-- Include Bootstrap JS and Popper.js for interactive components -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -215,4 +618,14 @@
     crossorigin="anonymous"
   />
 </div>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+  crossorigin="anonymous"
+></script>
+<script>
+  const toastLiveExample = document.getElementById("liveToast");
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get("id");
+</script>
 {% endblock %}

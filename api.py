@@ -178,8 +178,6 @@ def cart_submit():
             order_data = json.load(order_file)
         with open('user.json', 'r') as f:
             user = json.load(f)
-        restaurant = user['deliveryPersonnel']
-        random_index = random.randint(0, len(restaurant) - 1)
 
     
 
@@ -197,7 +195,7 @@ def cart_submit():
                 "raating": "",
                 "deliveryAddress": address,
                 "orderDate": current_date,
-                "deliveryPersonnel": restaurant[random_index].get('id')
+                "deliveryPersonID": None
             })
         # If there is no existing order, create a new one
         else:
@@ -211,7 +209,7 @@ def cart_submit():
                     "raating": "",
                     "deliveryAddress": address,
                     "orderDate": current_date,
-                    "deliveryPersonnel": restaurant[random_index].get('id')
+                    "deliveryPersonID": None
                 }]
             })
 
@@ -404,6 +402,32 @@ def restaurantManagement():
                                    orderFoods=result, name=username, id=userID, tab=tab, page="restaurantManagement")
     return redirect(url_for('login'))
 
+@app.route('/deliveryOrder', methods=['GET', 'POST'])
+def deliveryOrder():
+    with open('order.json', 'r') as f:
+        order = json.load(f)
+    with open('food.json', 'r') as f:
+        food = json.load(f)
+    with open('user.json', 'r') as f:
+        user = json.load(f)
+    deliveryPerson = [user for user in user["deliveryPersonnel"]]
+    order_id = request.args.get("orderId")
+    for customer_order in order:
+        if customer_order["customer"] == request.args.get("userId"):
+            for order_entry in customer_order["order"]:
+                if order_entry["orderId"] == int(order_id):
+                    food_list = []
+                    for order_food in order_entry["orderFood"]:
+                        for food_id, quantity in order_food.items():
+                            food_list.append({
+                                "foodId": int(food_id),
+                                "quantity": quantity
+                            })
+                    order_entry["orderFood"] = food_list
+                    return render_template('setDeliveryOrder.html', page="deliveryOrder", tab=session['tab'], id=session["id"], name=session["name"],
+                            orderId=order_id, foods=food, order=order_entry, deliveryPersons=deliveryPerson)
+    return url_for('restaurantManagement')
+
 @app.route('/confirmOrder', methods=['GET', 'POST'])
 def confirmOrder():
     if 'tab' in session:
@@ -411,6 +435,7 @@ def confirmOrder():
     with open('order.json', 'r') as f:
         order = json.load(f)
 
+    deliveryPersonID = request.args.get("deliveryPersonID")
     order_id = request.args.get("orderId")
 
     # Find the order with the given order_id
@@ -419,7 +444,8 @@ def confirmOrder():
             for order_entry in customer_order["order"]:
                 if order_entry["orderId"] == int(order_id):
                     # Update the status of the order to "confirmed"
-                    order_entry["status"] = "confirmed"
+                    order_entry["status"] = "delivery"
+                    order_entry["deliveryPersonID"] = deliveryPersonID
                     break
     
     # Save the updated order back to the file
@@ -478,6 +504,7 @@ def modifyFoodItems():
     with open('food.json', 'r') as f:
         foods = json.load(f)
     if request.method == 'POST':
+        print(request.form)
         for food in foods:
             if food['id'] == int(request.form['foodId']):
                 food['name'] = request.form['foodName']
@@ -487,12 +514,43 @@ def modifyFoodItems():
                 break
         with open('food.json', 'w') as f:
             json.dump(foods, f)
-        return redirect(url_for('modifyMenuItems')+"?message=Food item updated successfully")
+        return "Food item updated successfully"
+
+@app.route('/addFoodItem', methods=['GET', 'POST'])
+def addFoodItem():
+    if request.method == 'POST':
+        with open('food.json', 'r') as f:
+            foods = json.load(f)
+        food = {
+            "id": len(foods) + 1,
+            "name": request.form['foodName'],
+            "category": request.form['foodCategory'],
+            "price": request.form['foodPrice'],
+            "description": request.form['foodDescription'],
+            "image": request.form['image'],
+            "inStock": 1,
+            "restaurant": request.form['restaurant']
+        }
+        foods.append(food)
+        with open('food.json', 'w') as f:
+            json.dump(foods, f)
+        return redirect(url_for('addFoodItem')+"?message=Food item added successfully")
     else:
-        for oneFood in foods:
-            if oneFood['id'] == int(request.args.get("foodId")):
-                return render_template('modifyFoodItem.html', page="modifyOrder", tab=session['tab'], id=session["id"], name=session["name"], food=oneFood)
-    return redirect(url_for('modifyMenuItems'))
+        return render_template('addFoodItem.html', page="modifyOrder", tab=session['tab'], id=session["id"], name=session["name"], message=request.args.get("message"))
+
+@app.route('/deleteFoodItem', methods=['GET', 'POST'])
+def deleteFoodItem():
+    with open('food.json', 'r') as f:
+        foods = json.load(f)
+    for food in foods:
+        if food['id'] == int(request.form['foodId']):
+            foods.remove(food)
+            break
+    with open('food.json', 'w') as f:
+        json.dump(foods, f)
+    with open('cart.json', 'w') as f:
+        json.dump([], f)
+    return "Food item deleted successfully"
 
 if __name__ == '__main__':
     app.run(debug=True)
