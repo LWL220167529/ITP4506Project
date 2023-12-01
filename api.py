@@ -3,6 +3,7 @@ from flask_cors import CORS
 from datetime import datetime
 import json
 import random
+import os
 
 app = Flask(__name__, template_folder='templates', static_folder='image')
 app.secret_key = 'id'
@@ -500,20 +501,30 @@ def modifyMenuItems():
     return render_template('modifyMenuItems.html', page="modifyOrder", tab=session['tab'], id=session["id"], name=session["name"], foods=food, message=message)
 
 @app.route('/modifyFoodItem', methods=['GET', 'POST'])
+
 def modifyFoodItems():
     with open('food.json', 'r') as f:
         foods = json.load(f)
     if request.method == 'POST':
+        image = None
         print(request.form)
         for food in foods:
             if food['id'] == int(request.form['foodId']):
                 food['name'] = request.form['foodName']
                 food['category'] = request.form['foodCategory']
                 food['price'] = request.form['foodPrice']
+                if 'image' in request.files:
+                    image = food["image"]
+                    food["image"] = request.files['image'].filename
                 food['description'] = request.form['foodDescription']
                 break
         with open('food.json', 'w') as f:
             json.dump(foods, f)
+        if 'image' in request.files:
+            # Save the uploaded image to a specific directory
+            request.files['image'].save('image/' + request.files['image'].filename)
+            # Remove the old image file
+            # os.remove('image/' + image)
         return "Food item updated successfully"
 
 @app.route('/addFoodItem', methods=['GET', 'POST'])
@@ -527,13 +538,16 @@ def addFoodItem():
             "category": request.form['foodCategory'],
             "price": request.form['foodPrice'],
             "description": request.form['foodDescription'],
-            "image": request.form['image'],
+            "image": request.files['image'].filename,  # Get the filename of the uploaded image
             "inStock": 1,
             "restaurant": request.form['restaurant']
         }
         foods.append(food)
         with open('food.json', 'w') as f:
             json.dump(foods, f)
+        if 'image' in request.files:
+            # Save the uploaded image to a specific directory
+            request.files['image'].save('image/' + request.files['image'].filename)
         return redirect(url_for('addFoodItem')+"?message=Food item added successfully")
     else:
         return render_template('addFoodItem.html', page="modifyOrder", tab=session['tab'], id=session["id"], name=session["name"], message=request.args.get("message"))
@@ -544,6 +558,7 @@ def deleteFoodItem():
         foods = json.load(f)
     for food in foods:
         if food['id'] == int(request.form['foodId']):
+            # os.remove('image/' + food['image'])
             foods.remove(food)
             break
     with open('food.json', 'w') as f:

@@ -26,17 +26,18 @@
     padding-bottom: 10px;
     margin-bottom: 20px;
     margin-top: 20px;
-  }.sort-icon {
-  cursor: pointer;
-  color: #007bff;
-  display: block; /* Makes each icon appear on a new line /
+  }
+  .sort-icon {
+    cursor: pointer;
+    color: #007bff;
+    display: block; /* Makes each icon appear on a new line /
   text-align: center; / Centers the icons /
 }
 
 th {
   white-space: nowrap; / Prevents the header from wrapping onto multiple lines /
   text-align: left; / Aligns the text to the left */
-}
+  }
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
@@ -67,7 +68,7 @@ th {
       rows = table.rows;
       /* Loop through all table rows (except the
       first, which contains table headers): */
-      for (i = 1; i < (rows.length - 1); i++) {
+      for (i = 1; i < rows.length - 1; i++) {
         // Start by saying there should be no switching:
         shouldSwitch = false;
         /* Get the two elements you want to compare,
@@ -90,7 +91,7 @@ th {
         switching = true;
       }
     }
-  }  
+  }
   function sortDescendingTableName() {
     var table, rows, switching, i, x, y, first, second, shouldSwitch;
     table = document.getElementById("foodTable");
@@ -103,7 +104,7 @@ th {
       rows = table.rows;
       /* Loop through all table rows (except the
       first, which contains table headers): */
-      for (i = 1; i < (rows.length - 1); i++) {
+      for (i = 1; i < rows.length - 1; i++) {
         // Start by saying there should be no switching:
         shouldSwitch = false;
         /* Get the two elements you want to compare,
@@ -139,7 +140,7 @@ th {
       rows = table.rows;
       /* Loop through all table rows (except the
       first, which contains table headers): */
-      for (i = 1; i < (rows.length - 1); i++) {
+      for (i = 1; i < rows.length - 1; i++) {
         // Start by saying there should be no switching:
         shouldSwitch = false;
         /* Get the two elements you want to compare,
@@ -175,7 +176,7 @@ th {
       rows = table.rows;
       /* Loop through all table rows (except the
       first, which contains table headers): */
-      for (i = 1; i < (rows.length - 1); i++) {
+      for (i = 1; i < rows.length - 1; i++) {
         // Start by saying there should be no switching:
         shouldSwitch = false;
         /* Get the two elements you want to compare,
@@ -211,7 +212,7 @@ th {
       rows = table.rows;
       /* Loop through all table rows (except the
       first, which contains table headers): */
-      for (i = 1; i < (rows.length - 1); i++) {
+      for (i = 1; i < rows.length - 1; i++) {
         // Start by saying there should be no switching:
         shouldSwitch = false;
         /* Get the two elements you want to compare,
@@ -247,7 +248,7 @@ th {
       rows = table.rows;
       /* Loop through all table rows (except the
       first, which contains table headers): */
-      for (i = 1; i < (rows.length - 1); i++) {
+      for (i = 1; i < rows.length - 1; i++) {
         // Start by saying there should be no switching:
         shouldSwitch = false;
         /* Get the two elements you want to compare,
@@ -321,19 +322,58 @@ th {
       label.attr("hidden", false);
       $(this).attr("hidden", true);
     });
+    $(".itemImage").dblclick(function () {
+      const input = $(this).siblings();
+      input.attr("hidden", false);
+      input.focusin();
+      $(this).attr("hidden", true);
+    });
+    $(".inputItemImage").change(function () {
+      const file = this.files[0];
+      const reader = new FileReader();
+
+      const imagePreview = $(this).closest("td").find("img");
+      reader.onload = function (e) {
+        imagePreview.attr("src", e.target.result);
+        imagePreview.attr("hidden", false);
+      };
+
+      reader.readAsDataURL(file);
+    });
     $(".edit").click(function () {
-      // BEGIN: ask-user-confirm-edit
       if (confirm("Are you sure you want to edit the data?")) {
+        const fileInput = $(this).closest("tr").find("td:eq(1)").find("input");
+        const file = fileInput.prop("files")[0];
+
+        const formData = new FormData();
+        formData.append(
+          "foodId",
+          $(this).closest("tr").find("td:eq(0)").text()
+        );
+        formData.append(
+          "foodName",
+          $(this).closest("tr").find("td:eq(2)").find("label").text()
+        );
+        formData.append(
+          "foodCategory",
+          $(this).closest("tr").find("td:eq(3)").find("label").text()
+        );
+        formData.append(
+          "foodPrice",
+          $(this).closest("tr").find("td:eq(5)").find("label").text()
+        );
+        formData.append(
+          "foodDescription",
+          $(this).closest("tr").find("td:eq(4)").find("label").text()
+        );
+        formData.append("image", file); // Add the file to the form data
+
         $.ajax({
           url: "http://127.0.0.1:5000/modifyFoodItem",
           type: "POST",
-          data: {
-            foodId: $(this).closest("tr").find("td:eq(0)").text(),
-            foodName: $(this).closest("tr").find("td:eq(2)").find("label").text(),
-            foodCategory: $(this).closest("tr").find("td:eq(3)").find("label").text(),
-            foodPrice: $(this).closest("tr").find("td:eq(5)").find("label").text(),
-            foodDescription: $(this).closest("tr").find("td:eq(4)").find("label").text(),
-          },
+          data: formData, // Use the form data as the request data
+          processData: false, // Prevent jQuery from processing the data
+          contentType: false, // Prevent jQuery from setting the content type
           success: function (response) {
             console.log(response);
             alert(response);
@@ -431,16 +471,46 @@ th {
         <thead>
           <tr>
             <th>Image</th>
-            <th>Dish Name<br />
-              <span class="sort-icon ascending" onclick="sortAscendingTableName()">▲</span>
-              <span class="sort-icon descending" onclick="sortDescendingTableName()">▼</span></th>
-            <th>Category<br />
-              <span class="sort-icon ascending" onclick="sortAscendingTableCategory()">▲</span>
-              <span class="sort-icon descending" onclick="sortDescendingTableCategory()">▼</span></th>
+            <th>
+              Dish Name<br />
+              <span
+                class="sort-icon ascending"
+                onclick="sortAscendingTableName()"
+                >▲</span
+              >
+              <span
+                class="sort-icon descending"
+                onclick="sortDescendingTableName()"
+                >▼</span
+              >
+            </th>
+            <th>
+              Category<br />
+              <span
+                class="sort-icon ascending"
+                onclick="sortAscendingTableCategory()"
+                >▲</span
+              >
+              <span
+                class="sort-icon descending"
+                onclick="sortDescendingTableCategory()"
+                >▼</span
+              >
+            </th>
             <th>Description</th>
-            <th>Price<br />
-              <span class="sort-icon ascending" onclick="sortAscendingTablePrice()">▲</span>
-              <span class="sort-icon descending" onclick="sortDescendingTablePrice()">▼</span></th>
+            <th>
+              Price<br />
+              <span
+                class="sort-icon ascending"
+                onclick="sortAscendingTablePrice()"
+                >▲</span
+              >
+              <span
+                class="sort-icon descending"
+                onclick="sortDescendingTablePrice()"
+                >▼</span
+              >
+            </th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -454,9 +524,10 @@ th {
               <img
                 src="{{url_for('static', filename=item.image)}}"
                 alt="{{item.image}}"
+                class="itemImage"
                 width="50"
                 height="50"
-              />
+              /><input type="file" class="inputItemImage" hidden />
             </td>
             <td>
               <label class="itemName">{{item.name}}</label
