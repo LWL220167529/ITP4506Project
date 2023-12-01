@@ -1,5 +1,31 @@
 {% extends "menu.html" %} {% block title %}Checkout Page{% endblock %}
 {%block content %}
+<script>
+  function onSubmit(customerID, orderID, deliveryPersonID) {
+    // Send a POST request to the server
+    var deliveryPerson = document.getElementById("deliveryPersonID");
+    var item = {
+        customerID: customerID,
+        orderID: orderID,
+        deliveryPersonID: deliveryPersonID}
+    fetch('/setDelivery', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(item)
+    })
+    .then(response => response.json())
+    .then(data => {
+      alert(data.message);
+      deliveryPerson.innerHTML = deliveryPersonID;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      console.log(item);
+    });
+  }
+</script>
 <table>
     <tr>
         <th>orderId</th>
@@ -8,6 +34,7 @@
         <th>status</th>
         <th>deliveryAddress</th>
         <th>orderDate</th>
+        <th>deliveryPerson</th>
     </tr>
     <tr>
         <td>{{order.orderId}}</td>
@@ -24,16 +51,15 @@
         <td>{{order.status}}</td>
         <td>{{order.deliveryAddress}}</td>
         <td>{{order.orderDate}}</td>
+        <td id="deliveryPersonID">{{order.deliveryPersonID}}</td>
     </tr>    
 </table>
 {% for deliveryPerson in deliveryPersons %}
-<from>
-    <input type="text" id="orderId" name="orderId" value="{{order.orderId}}" hidden>
-    <input type="text" id="deliveryPersonId" name="deliveryPersonId" value="{{deliveryPerson.id}}" hidden>
+<a>
     <label>{{deliveryPerson.name}}</label>
     <label>{{deliveryPerson.email}}</label>
     <label>{{deliveryPerson.phone}}</label>
-    <input type="submit" value="deliveryPerson" onclick="selectDeliveryPerson({{deliveryPerson.id}}, {{order.orderId}})">
-</from><br>
+    <input type="button" value="deliveryPerson" onclick="onSubmit('{{customer}}', {{order.orderId}}, '{{deliveryPerson.id}}')">
+</a><br>
 {% endfor %}
 {% endblock %}

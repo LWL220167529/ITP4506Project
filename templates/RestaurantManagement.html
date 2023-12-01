@@ -28,16 +28,12 @@
     margin-top: 20px;
   }
   .sort-icon {
-    cursor: pointer;
-    color: #007bff;
-    display: block; /* Makes each icon appear on a new line /
-  text-align: center; / Centers the icons /
+  cursor: pointer;
+  color: #6c757d;
+  font-size: 1em; /* Adjust size as necessary */
+  margin-left: 5px; /* Space between text and icon */
+  vertical-align: middle; /* Align icon with text vertically */
 }
-
-th {
-  white-space: nowrap; / Prevents the header from wrapping onto multiple lines /
-  text-align: left; / Aligns the text to the left */
-  }
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
@@ -397,25 +393,31 @@ th {
     });
 
     $(".delete").click(function () {
-      const thisRow = $(this).closest("tr");
-      $.ajax({
-        url: "http://127.0.0.1:5000/deleteFoodItem",
-        type: "POST",
-        data: {
-          foodId: $(this).closest("tr").find("td:eq(0)").text(),
-        },
-        success: function (response) {
-          console.log(response);
-          thisRow.remove();
-          const toastBootstrap =
-            bootstrap.Toast.getOrCreateInstance(toastLiveExample);
-          toastBootstrap.show();
-        },
-        error: function (error) {
-          console.log(error);
-        },
-      });
+      if (confirm("Are you sure you want to delete the food item?")) {
+        const thisRow = $(this).closest("tr");
+        $.ajax({
+          url: "http://127.0.0.1:5000/deleteFoodItem",
+          type: "POST",
+          data: {
+            foodId: $(this).closest("tr").find("td:eq(0)").text(),
+          },
+          success: function (response) {
+            console.log(response);
+            thisRow.remove();
+            const toastBootstrap =
+              bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
+          },
+          error: function (error) {
+            console.log(error);
+          },
+        });
+      }
     });
+    $('.sort').click(function(){
+      $(this).siblings().attr("hidden", false);
+      $(this).attr("hidden", true);
+    })
   });
 </script>
 
@@ -472,44 +474,20 @@ th {
           <tr>
             <th>Image</th>
             <th>
-              Dish Name<br />
-              <span
-                class="sort-icon ascending"
-                onclick="sortAscendingTableName()"
-                >▲</span
-              >
-              <span
-                class="sort-icon descending"
-                onclick="sortDescendingTableName()"
-                >▼</span
-              >
+              Dish Name
+              <i class="fas fa-sort-up sort-icon ascending sort" onclick="sortAscendingTableName()"></i>
+              <i class="fas fa-sort-down sort-icon descending sort" onclick="sortDescendingTableName()" hidden></i>
             </th>
             <th>
-              Category<br />
-              <span
-                class="sort-icon ascending"
-                onclick="sortAscendingTableCategory()"
-                >▲</span
-              >
-              <span
-                class="sort-icon descending"
-                onclick="sortDescendingTableCategory()"
-                >▼</span
-              >
+              Category
+              <i class="fas fa-sort-up sort-icon ascending sort" onclick="sortAscendingTableCategory()"></i>
+              <i class="fas fa-sort-down sort-icon descending sort" onclick="sortDescendingTableCategory()" hidden></i>
             </th>
             <th>Description</th>
             <th>
-              Price<br />
-              <span
-                class="sort-icon ascending"
-                onclick="sortAscendingTablePrice()"
-                >▲</span
-              >
-              <span
-                class="sort-icon descending"
-                onclick="sortDescendingTablePrice()"
-                >▼</span
-              >
+              Price
+              <i class="fas fa-sort-up sort-icon ascending sort" onclick="sortAscendingTablePrice()"></i>
+              <i class="fas fa-sort-down sort-icon descending sort" onclick="sortDescendingTablePrice()" hidden></i>
             </th>
             <th>Actions</th>
           </tr>
@@ -617,7 +595,7 @@ th {
                 >
               </td>
               <td>
-                {%if customerOrder.status == 'pending'%}
+                {%if customerOrder.status != 'confirm'%}
                 <button class="btn btn-sm btn-success confirm">Confirm</button>
                 <button
                   class="btn btn-sm btn-success setDeliveryPerson"

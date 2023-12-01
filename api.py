@@ -192,7 +192,7 @@ def cart_submit():
                 'orderId': existing_order['order'][-1]['orderId'] + 1,
                 'orderFood': cart_data,
                 'status': 'pending',
-                "total": int(totalPrice),
+                "total": totalPrice,
                 "raating": "",
                 "deliveryAddress": address,
                 "orderDate": current_date,
@@ -206,7 +206,7 @@ def cart_submit():
                     'orderId': 1,
                     'orderFood': cart_data,
                     'status': 'pending',
-                    "total": int(totalPrice),
+                    "total": totalPrice,
                     "raating": "",
                     "deliveryAddress": address,
                     "orderDate": current_date,
@@ -403,6 +403,97 @@ def restaurantManagement():
                                    orderFoods=result, name=username, id=userID, tab=tab, page="restaurantManagement")
     return redirect(url_for('login'))
 
+@app.route('/deliveryPersonnel', methods=['GET', 'POST'])
+def deliveryPersonnel():
+    with open('food.json', 'r') as f:
+        food = json.load(f)
+    with open('order.json', 'r') as f:
+        order = json.load(f)
+    with open('user.json', 'r') as f:
+        user = json.load(f)
+    
+    result = []
+    for order_entry in order:
+        customer_detail = {
+            "customer": order_entry["customer"],
+            "food": [],
+        }
+
+        for order in order_entry["order"]:
+            food_list = []
+
+            for order_food in order["orderFood"]:
+                for food_id, quantity in order_food.items():
+                    food_list.append({
+                        "foodId": int(food_id),
+                        "quantity": quantity
+                    })
+
+            customer_detail["food"].append({
+                "orderId": order["orderId"],
+                "orderFood": food_list,
+                "status": order["status"],
+                "raating": order["raating"],
+                "total": order["total"],
+                "deliveryPersonID": order["deliveryPersonID"]
+            })
+
+        result.append(customer_detail)
+    return render_template('deliveryPersonnel.html', page="deliveryPersonnel", tab=session['tab'], id=session["id"], name=session["name"],
+                                customers=user["customer"], foods=food, orderFoods=result)
+
+@app.route('/getDelivery', methods=['GET', 'POST'])
+def getDeliveryOrder():
+    with open('food.json', 'r') as f:
+        food = json.load(f)
+    with open('order.json', 'r') as f:
+        order = json.load(f)
+    with open('user.json', 'r') as f:
+        user = json.load(f)
+    data = request.get_json()
+    customerID = data['customerID']
+    orderID = data['orderID']
+    if request.method == 'POST':
+        for customer_order in order:
+            if customer_order["customer"] == customerID:
+                for order_entry in customer_order["order"]:
+                    if order_entry["orderId"] == orderID:
+                        if order_entry["status"] == "getDelivery":
+                            order_entry["status"] = "confirmed"
+                            break
+                        elif order_entry["status"] == "sentDelivery":
+                            order_entry["status"] = "getDelivery"
+                            break
+    with open('order.json', 'w') as f:
+        json.dump(order, f)
+    return "Order status updated successfully"
+    
+
+@app.route('/setDelivery', methods=['GET', 'POST'])
+def setDeliveryOrder():
+    if request.method == 'POST':
+        data = request.get_json()
+        customerID = data['customerID']
+        orderID = data['orderID']
+        deliveryPersonID = data['deliveryPersonID']
+        
+        with open('order.json', 'r') as f:
+            order = json.load(f)
+        
+        for customer_order in order:
+            if customer_order["customer"] == customerID:
+                for order_entry in customer_order["order"]:
+                    if order_entry["orderId"] == orderID:
+                        # Update the status of the order to "confirmed"
+                        order_entry["status"] = "sentDelivery"
+                        order_entry["deliveryPersonID"] = deliveryPersonID
+        
+        # Save the updated order back to the file
+        with open('order.json', 'w') as f:
+            json.dump(order, f)
+        
+        return jsonify({'message': 'Order has been assigned to the delivery person'})
+
 @app.route('/deliveryOrder', methods=['GET', 'POST'])
 def deliveryOrder():
     with open('order.json', 'r') as f:
@@ -412,22 +503,37 @@ def deliveryOrder():
     with open('user.json', 'r') as f:
         user = json.load(f)
     deliveryPerson = [user for user in user["deliveryPersonnel"]]
-    order_id = request.args.get("orderId")
-    for customer_order in order:
-        if customer_order["customer"] == request.args.get("userId"):
-            for order_entry in customer_order["order"]:
-                if order_entry["orderId"] == int(order_id):
-                    food_list = []
-                    for order_food in order_entry["orderFood"]:
-                        for food_id, quantity in order_food.items():
-                            food_list.append({
-                                "foodId": int(food_id),
-                                "quantity": quantity
-                            })
-                    order_entry["orderFood"] = food_list
-                    return render_template('setDeliveryOrder.html', page="deliveryOrder", tab=session['tab'], id=session["id"], name=session["name"],
-                            orderId=order_id, foods=food, order=order_entry, deliveryPersons=deliveryPerson)
-    return url_for('restaurantManagement')
+    if request.method == 'POST':
+        print(request.form)
+        print(request)
+        for customer_order in order:
+            if customer_order["customer"] == request.form["customerID"]:
+                for order_entry in customer_order["order"]:
+                    if order_entry["orderId"] == request.form["orderID"]:
+                        # Update the status of the order to "confirmed"
+                        order_entry["status"] = "sentDelivery"
+                        order_entry["deliveryPersonID"] = request.form["deliveryPersonID"]
+    # Save the updated order back to the file
+        with open('order.json', 'w') as f:
+            json.dump(order, f)
+        return "Order has been assigned to the delivery person"
+    elif request.method == 'GET':
+        order_id = request.args.get("orderId")
+        for customer_order in order:
+            if customer_order["customer"] == request.args.get("userId"):
+                for order_entry in customer_order["order"]:
+                    if order_entry["orderId"] == int(order_id):
+                        food_list = []
+                        for order_food in order_entry["orderFood"]:
+                            for food_id, quantity in order_food.items():
+                                food_list.append({
+                                    "foodId": int(food_id),
+                                    "quantity": quantity
+                                })
+                        order_entry["orderFood"] = food_list
+                        return render_template('setDeliveryOrder.html', page="deliveryOrder", tab=session['tab'], id=session["id"], name=session["name"],
+                                orderId=order_id, foods=food, order=order_entry, deliveryPersons=deliveryPerson, message=request.args.get("message"), customer=request.args.get("userId"))
+    return redirect(url_for('restaurantManagement'))
 
 @app.route('/confirmOrder', methods=['GET', 'POST'])
 def confirmOrder():
@@ -488,10 +594,6 @@ def history():
                 orderfood.append(order_details)
     return render_template('orderhistory.html', name=username, id=userID, tab=tab, orders=order, foods=food,
                                     orderFoods=orderfood, page="history")
-
-@app.route('/deliveryPersonnel')
-def deliveryPersonnel():
-    return render_template('deliveryPersonnel.html', page="deliveryPersonnel", tab=session['tab'], id=session["id"], name=session["name"])
 
 @app.route('/modifyMenuItems', methods=['GET', 'POST'])
 def modifyMenuItems():
@@ -558,7 +660,6 @@ def deleteFoodItem():
         foods = json.load(f)
     for food in foods:
         if food['id'] == int(request.form['foodId']):
-            # os.remove('image/' + food['image'])
             foods.remove(food)
             break
     with open('food.json', 'w') as f:
