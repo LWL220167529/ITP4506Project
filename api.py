@@ -339,6 +339,8 @@ def register():
     if request.method == 'POST':
         try:
             user_type = request.form['user']
+            if request.form['id'] == "" or request.form['name'] == "" or request.form['email'] == "" or request.form['phone'] == "" or request.form['password'] == "":
+                return render_template('register.html', message="Please fill in the form to register")
             user_data = {
                 "id": request.form['id'],
                 "name": request.form['name'],
@@ -356,7 +358,7 @@ def register():
             return render_template('register.html', message="Register acount successfully")
         except Exception as e:
             return jsonify({'error': str(e)})
-    return render_template('register.html', message="Please fill in the form to register")
+    return render_template('register.html')
 
 
 @app.route('/restaurantManagement')
