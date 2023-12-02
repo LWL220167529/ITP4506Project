@@ -459,11 +459,11 @@ def getDeliveryOrder():
             if customer_order["customer"] == customerID:
                 for order_entry in customer_order["order"]:
                     if order_entry["orderId"] == orderID:
-                        if order_entry["status"] == "getDelivery":
-                            order_entry["status"] = "confirmed"
+                        if order_entry["status"] == "delivering":
+                            order_entry["status"] = "delviered"
                             break
-                        elif order_entry["status"] == "sentDelivery":
-                            order_entry["status"] = "getDelivery"
+                        elif order_entry["status"] == "assignedDelivery":
+                            order_entry["status"] = "delivering"
                             break
     with open('order.json', 'w') as f:
         json.dump(order, f)
@@ -486,7 +486,7 @@ def setDeliveryOrder():
                 for order_entry in customer_order["order"]:
                     if order_entry["orderId"] == orderID:
                         # Update the status of the order to "confirmed"
-                        order_entry["status"] = "sentDelivery"
+                        order_entry["status"] = "assignedDelivery"
                         order_entry["deliveryPersonID"] = deliveryPersonID
         
         # Save the updated order back to the file
@@ -512,7 +512,7 @@ def deliveryOrder():
                 for order_entry in customer_order["order"]:
                     if order_entry["orderId"] == request.form["orderID"]:
                         # Update the status of the order to "confirmed"
-                        order_entry["status"] = "sentDelivery"
+                        order_entry["status"] = "assignedDelivery"
                         order_entry["deliveryPersonID"] = request.form["deliveryPersonID"]
     # Save the updated order back to the file
         with open('order.json', 'w') as f:

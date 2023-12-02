@@ -1,65 +1,95 @@
-{% extends "menu.html" %} {% block title %}Checkout Page{% endblock %}
-{%block content %}
+{% extends "menu.html" %} {% block title %}Checkout Page{% endblock %} {%block
+content %}
 <script>
-  function onSubmit(customerID, orderID, deliveryPersonID) {
+  function onSubmit(customerID, orderID) {
     // Send a POST request to the server
-    var deliveryPerson = document.getElementById("deliveryPersonID");
+    var deliveryPerson = document.getElementById("deliveryPerson");
+    var selectedDeliveryPerson = document.querySelector(
+      'input[name="deliveryPerson"]:checked'
+    ).value;
+    console.log(selectedDeliveryPerson);
     var item = {
-        customerID: customerID,
-        orderID: orderID,
-        deliveryPersonID: deliveryPersonID}
-    fetch('/setDelivery', {
-      method: 'POST',
+      customerID: customerID,
+      orderID: orderID,
+      deliveryPersonID: selectedDeliveryPerson,
+    };
+    fetch("/setDelivery", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(item)
+      body: JSON.stringify(item),
     })
-    .then(response => response.json())
-    .then(data => {
-      alert(data.message);
-      deliveryPerson.innerHTML = deliveryPersonID;
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      console.log(item);
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        alert(data.message);
+        deliveryPerson.innerHTML = selectedDeliveryPerson;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        console.log(item);
+      });
   }
 </script>
-<table>
-    <tr>
-        <th>orderId</th>
-        <th>orderFood</th>
-        <th>Price</th>
-        <th>status</th>
-        <th>deliveryAddress</th>
-        <th>orderDate</th>
-        <th>deliveryPerson</th>
-    </tr>
-    <tr>
-        <td>{{order.orderId}}</td>
-        <td>
-            {%for food in order.orderFood%}
-            {%for item in foods%}
-            {%if item.id == food.foodId%}
-            <p>{{item.name}} x {{food.quantity}}</p>
-            {%endif%}
-            {%endfor%}
-            {%endfor%}
-        </td>
-        <td>${{order.total}}</td>
-        <td>{{order.status}}</td>
-        <td>{{order.deliveryAddress}}</td>
-        <td>{{order.orderDate}}</td>
-        <td id="deliveryPersonID">{{order.deliveryPersonID}}</td>
-    </tr>    
-</table>
-{% for deliveryPerson in deliveryPersons %}
-<a>
-    <label>{{deliveryPerson.name}}</label>
-    <label>{{deliveryPerson.email}}</label>
-    <label>{{deliveryPerson.phone}}</label>
-    <input type="button" value="deliveryPerson" onclick="onSubmit('{{customer}}', {{order.orderId}}, '{{deliveryPerson.id}}')">
-</a><br>
-{% endfor %}
+<div class="container mt-5" style="max-width: 40%">
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="d-flex justify-content-between mb-3">
+        <h4>Assign Order ({{order.orderId}})</h4>
+        <div class="deliveryPerson text-body-secondary">
+        deliveryPerson: <a id="deliveryPerson">{{order.deliveryPersonID}}</a></div>
+      </div>
+      <hr />
+
+      <div class="mb-3">
+        <h5>Restaurant Address</h5>
+        <strong>88 Golden Crescent Street, Kowloon Bay</strong>
+      </div>
+      <hr />
+
+      <div class="mb-3">
+        <h5>Ordered items</h5>
+        <div class="item-row mb-3">
+          <span
+            >{%for food in order.orderFood%} {%for item in foods%} {%if item.id
+            == food.foodId%} {{item.name}} x {{food.quantity}} {%endif%}
+            {%endfor%} {%endfor%}</span
+          >
+        </div>
+      </div>
+      <hr />
+
+      <div class="mb-3">
+        <strong>Delivery Address</strong>
+        <h5>{{order.deliveryAddress}}</h5>
+      </div>
+
+      <div class="mb-3">
+        <label for="deliveryPerson" class="form-label"
+          >Select Delivery Person</label
+        ><br />
+        {% for deliveryPerson in deliveryPersons %}
+        <a>
+          <input
+            type="radio"
+            value="{{deliveryPerson.id}}"
+            name="deliveryPerson"
+            id="deliveryPerson"
+          />
+          <label>{{deliveryPerson.name}}</label>
+          <Strong>Tel : {{deliveryPerson.phone}}</Strong>
+        </a><br />
+
+        {% endfor %}
+      </div>
+
+      <input
+        type="button"
+        class="btn btn-danger w-100"
+        onclick="onSubmit('{{customer}}', {{order.orderId}})"
+        value="ASSIGN ORDER"
+      />
+    </div>
+  </div>
+</div>
 {% endblock %}

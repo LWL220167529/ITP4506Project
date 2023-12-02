@@ -107,6 +107,7 @@ endblock %} {%block content %}
                 <th>Order ID</th>
                 <th>Customer Name</th>
                 <th>Ordered Dishes</th>
+                <th>Restaurant Address</th>
                 <th>Address</th>
                 <th>Date</th>
                 <th>Status</th>
@@ -129,6 +130,7 @@ endblock %} {%block content %}
                   <p>{{item.name}} x {{food.quantity}}</p>
                   {%endif%} {%endfor%} {%endfor%}
                 </td>
+                <td>88 Golden Crescent Street, Kowloon Bay</td>
                 <td>{%for user in customers%}{%if user.id ==
                   order.customer%}{{user.address}}{%endif%}{%endfor%}</td>
                   <td>{{customerOrder.orderDate}}
@@ -139,14 +141,14 @@ endblock %} {%block content %}
                   >
                 </td>
                 <td>
-                  {%if customerOrder.status == 'sentDelivery'%}
+                  {%if customerOrder.status == 'assignedDelivery'%}
                   <button
                     class="btn btn-sm btn-success setDeliveryPerson"
                     onclick="deliveryOrder({{customerOrder.orderId}}, {%for user in customers%}{%if user.id == order.customer%}'{{user.id}}'{%endif%}{%endfor%})"
                   >
                     got the order
                   </button>
-                  {%elif customerOrder.status == 'getDelivery'%}
+                  {%elif customerOrder.status == 'delivering'%}
                   <button
                     class="btn btn-sm btn-success"
                     onclick="deliveryOrderConfirmed({{customerOrder.orderId}}, {%for user in customers%}{%if user.id == order.customer%}'{{user.id}}'{%endif%}{%endfor%})"
