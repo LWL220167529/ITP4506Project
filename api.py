@@ -353,10 +353,10 @@ def register():
             data[user_type].append(user_data)
             with open('user.json', 'w') as f:
                 json.dump(data, f)
-            return redirect(url_for('login'))
+            return render_template('register.html', message="Register acount successfully")
         except Exception as e:
             return jsonify({'error': str(e)})
-    return render_template('register.html')
+    return render_template('register.html', message="Please fill in the form to register")
 
 
 @app.route('/restaurantManagement')

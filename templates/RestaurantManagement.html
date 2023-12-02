@@ -607,7 +607,7 @@
                 >
                   Set delivery person
                 </button>
-                {%else%}
+                {%elif customerOrder.status != 'delviered'%}
                 
                 <button
                   class="btn btn-sm btn-success setDeliveryPerson"
