@@ -171,7 +171,7 @@ def cart_submit():
         totalPrice = request.args.get("totalPrice")
 
         # Get the current date
-        current_date = datetime.now().strftime('%Y-%m-%d')
+        current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         # Load cart and order data
         with open('cart.json', 'r') as cart_file, open('order.json', 'r') as order_file:
