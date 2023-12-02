@@ -595,14 +595,25 @@
                 >
               </td>
               <td>
-                {%if customerOrder.status != 'delviered'%}
+                {%if customerOrder.status != 'delviered' and customerOrder.deliveryPersonID == None %}
+                {%if customerOrder.status == 'pending'%}
                 <button class="btn btn-sm btn-success confirm">Confirm</button>
+                {%endif%}
                 <button
                   class="btn btn-sm btn-success setDeliveryPerson"
                   onclick="deliveryOrder({{customerOrder.orderId}}, {%for user in customers%}{%if user.id == order.customer%}'{{user.id}}'{%endif%}{%endfor%})"
-                  hidden
+                  
+                {%if customerOrder.status == 'pending'%}hidden{%endif%}
                 >
                   Set delivery person
+                </button>
+                {%else%}
+                
+                <button
+                  class="btn btn-sm btn-success setDeliveryPerson"
+                  onclick="deliveryOrder({{customerOrder.orderId}}, {%for user in customers%}{%if user.id == order.customer%}'{{user.id}}'{%endif%}{%endfor%})"
+                >
+                Change Delivery Person
                 </button>
                 {%endif%}
                 <button class="btn btn-sm btn-danger">Cancel</button>

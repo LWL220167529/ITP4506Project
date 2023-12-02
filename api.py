@@ -395,9 +395,10 @@ def restaurantManagement():
                         "orderFood": food_list,
                         "status": order["status"],
                         "raating": order["raating"],
-                        "total": order["total"]
+                        "total": order["total"],
+                        "orderDate": order["orderDate"],
+                        "deliveryPersonID": order["deliveryPersonID"]
                     })
-
                 result.append(customer_detail)
             return render_template('restaurantManagement.html', customers=user["customer"], foods=food,
                                    orderFoods=result, name=username, id=userID, tab=tab, page="restaurantManagement")
@@ -460,7 +461,7 @@ def getDeliveryOrder():
                 for order_entry in customer_order["order"]:
                     if order_entry["orderId"] == orderID:
                         if order_entry["status"] == "delivering":
-                            order_entry["status"] = "delviered"
+                            order_entry["status"] = "delivered"
                             break
                         elif order_entry["status"] == "assignedDelivery":
                             order_entry["status"] = "delivering"
