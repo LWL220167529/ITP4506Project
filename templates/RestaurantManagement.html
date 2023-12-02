@@ -595,7 +595,7 @@
                 >
               </td>
               <td>
-                {%if customerOrder.status != 'delviered' and customerOrder.deliveryPersonID == None %}
+                {%if customerOrder.status != 'delivered' and customerOrder.deliveryPersonID == None %}
                 {%if customerOrder.status == 'pending'%}
                 <button class="btn btn-sm btn-success confirm">Confirm</button>
                 {%endif%}
@@ -607,7 +607,7 @@
                 >
                   Set delivery person
                 </button>
-                {%elif customerOrder.status != 'delviered'%}
+                {%elif customerOrder.status != 'delivered'%}
                 
                 <button
                   class="btn btn-sm btn-success setDeliveryPerson"
@@ -616,7 +616,6 @@
                 Change Delivery Person
                 </button>
                 {%endif%}
-                <button class="btn btn-sm btn-danger">Cancel</button>
               </td>
             </tr>
             {%endfor%} {%endfor%}
