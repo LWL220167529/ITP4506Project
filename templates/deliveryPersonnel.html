@@ -108,6 +108,7 @@ endblock %} {%block content %}
                 <th>Customer Name</th>
                 <th>Ordered Dishes</th>
                 <th>Address</th>
+                <th>Date</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
@@ -130,6 +131,8 @@ endblock %} {%block content %}
                 </td>
                 <td>{%for user in customers%}{%if user.id ==
                   order.customer%}{{user.address}}{%endif%}{%endfor%}</td>
+                  <td>{{customerOrder.orderDate}}
+                  </td>
                 <td>
                   <span class="badge bg-warning text-dark"
                     >{{customerOrder.status}}</span

@@ -434,6 +434,7 @@ def deliveryPersonnel():
                 "orderFood": food_list,
                 "status": order["status"],
                 "raating": order["raating"],
+                "orderDate": order["orderDate"],
                 "total": order["total"],
                 "deliveryPersonID": order["deliveryPersonID"]
             })
